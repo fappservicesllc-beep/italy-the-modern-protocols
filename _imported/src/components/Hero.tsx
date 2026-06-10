@@ -1,0 +1,72 @@
+import React from 'react';
+import { FadeIn } from './ui/FadeIn';
+import { Button } from './ui/Button';
+export function Hero() {
+  return (
+    <section className="relative pt-20 pb-24 md:pt-32 md:pb-32 overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[50%] h-[50%] rounded-full bg-gold/5 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[50%] h-[50%] rounded-full bg-emerald-900/5 blur-[120px]" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <div className="order-2 lg:order-1 max-w-2xl">
+            <FadeIn delay={0.1}>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-px w-12 bg-gold" />
+                <span className="text-gold font-sans text-xs font-bold tracking-[0.2em] uppercase">
+                  The Italy Insider Protocol
+                </span>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-emerald-900 leading-[1.1] mb-6">
+                Stop Being a "Target": How to Navigate Italy with the Authority
+                of a Local
+              </h1>
+            </FadeIn>
+
+            <FadeIn delay={0.3}>
+              <p className="text-lg md:text-xl text-charcoal/80 font-serif italic mb-8">
+                (Even If You Don't Speak the Language)
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+              <p className="text-base md:text-lg text-charcoal/70 leading-relaxed font-sans font-light">
+                Bypass the "Tourist Wall," secure the best tables, and earn
+                immediate respect with the Heritage Intelligence protocol used
+                by insiders.
+              </p>
+            </FadeIn>
+          </div>
+
+          <div className="order-1 lg:order-2 relative">
+            <FadeIn delay={0.3} direction="left">
+              <div className="relative mx-auto max-w-[400px] lg:max-w-none">
+                {/* Decorative frame behind image */}
+                <div className="absolute inset-0 border border-gold/30 translate-x-4 translate-y-4 rounded-sm -z-10" />
+                <img
+                  src="/THE_ITALY_INSIDER_PROTOCOL_IMAGE.png"
+                  alt="The Italy Insider Protocol on a smartphone at an Italian cafe"
+                  className="w-full h-auto rounded-sm shadow-2xl object-cover aspect-[4/5] object-center" />
+                
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.5}>
+              <div className="mt-8 flex justify-center">
+                <Button className="w-full sm:w-auto">
+                  Get The Protocol Now
+                </Button>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </div>
+    </section>);
+
+}

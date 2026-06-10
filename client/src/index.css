@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f5efe3;
+  color: #1f2937;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+}
+
+/* Subtle paper grain */
+.bg-paper {
+  background-color: #f5efe3;
+  background-image:
+    radial-gradient(rgba(15, 61, 46, 0.025) 1px, transparent 1px),
+    radial-gradient(rgba(201, 169, 97, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px, 36px 36px;
+  background-position: 0 0, 12px 12px;
+}
