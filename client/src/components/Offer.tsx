@@ -80,7 +80,13 @@ export function Offer() {
               <p className="text-[11px] md:text-xs text-charcoal/60 font-sans tracking-wider">
                 Immediate digital delivery
               </p>
+              <p className="text-xs md:text-sm text-charcoal/60 font-sans tracking-wider text-center mt-2">
+                Travelers from New York, Miami, and Chicago are already using this protocol before their Italy trips.
+              </p>
             </div>
+            <p className="text-xs md:text-sm text-charcoal/60 font-sans text-center mt-3 italic">
+              30-Day Money-Back Guarantee. If you don't feel more confident navigating Italy after using this protocol, email us and we'll refund every penny. No questions asked.
+            </p>
 
             <div className="flex items-center justify-center gap-3 my-8 md:my-10">
               <div className="h-px w-16 bg-gold/40" />
