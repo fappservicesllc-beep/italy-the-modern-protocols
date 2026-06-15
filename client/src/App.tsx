@@ -1,5 +1,6 @@
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Hero } from "@/components/Hero";
+import { SocialProofBar } from "@/components/SocialProofBar";
 import { OpeningHook } from "@/components/OpeningHook";
 import { Problem } from "@/components/Problem";
 import { WhyFailed } from "@/components/WhyFailed";
@@ -18,6 +19,7 @@ export default function App() {
       <AnnouncementBar />
       <main className="pt-10 md:pt-10">
         <Hero />
+        <SocialProofBar />
         <OpeningHook />
         <Problem />
         <WhyFailed />
