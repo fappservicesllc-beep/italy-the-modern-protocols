@@ -10,7 +10,7 @@ import { WhoFor } from "@/components/WhoFor";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Proof } from "@/components/Proof";
 import { FAQ } from "@/components/FAQ";
-import { Offer } from "@/components/Offer";
+import { ValueStack } from "@/components/ValueStack";
 import { Footer } from "@/components/Footer";
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
         <HowItWorks />
         <Proof />
         <FAQ />
-        <Offer />
+        <ValueStack />
       </main>
       <Footer />
     </div>
