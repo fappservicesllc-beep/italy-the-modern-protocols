@@ -1,3 +1,4 @@
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Hero } from "@/components/Hero";
 import { OpeningHook } from "@/components/OpeningHook";
 import { Problem } from "@/components/Problem";
@@ -14,7 +15,8 @@ import { Footer } from "@/components/Footer";
 export default function App() {
   return (
     <div className="min-h-screen bg-ivory selection:bg-gold/30 selection:text-emerald-900">
-      <main>
+      <AnnouncementBar />
+      <main className="pt-10 md:pt-10">
         <Hero />
         <OpeningHook />
         <Problem />
