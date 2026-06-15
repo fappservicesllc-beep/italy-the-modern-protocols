@@ -29,73 +29,71 @@ export function ValueStack() {
             <div className="absolute bottom-0 left-0 w-10 h-10 md:w-12 md:h-12 border-b-2 border-l-2 border-gold m-2 md:m-3 opacity-60 pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-10 h-10 md:w-12 md:h-12 border-b-2 border-r-2 border-gold m-2 md:m-3 opacity-60 pointer-events-none" />
 
-            {/* ============ TOP: BONUS ============ */}
+            {/* ============ TOP: DOUBLE BONUS ============ */}
             <div
               className="px-6 sm:px-8 md:px-12 pt-6 md:pt-8 pb-4 md:pb-5"
               data-testid="value-stack-bonus"
             >
-              <div className="text-center mb-3 md:mb-4">
+              <div className="text-center mb-4 md:mb-5">
                 <div className="inline-flex items-center gap-3">
                   <div className="h-px w-6 md:w-8 bg-gold" />
                   <span className="text-gold font-sans text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase">
-                    Free Bonus Included
+                    Two Free Bonuses Included
                   </span>
                   <div className="h-px w-6 md:w-8 bg-gold" />
                 </div>
               </div>
 
-              <p
-                className="text-lg sm:text-xl md:text-2xl font-serif font-black text-emerald-900 leading-tight text-center mb-1.5 tracking-tight"
-                data-testid="text-bonus-headline"
-              >
-                <span aria-hidden="true">🗺️ </span>
-                The Tourist Trap Map
-              </p>
-              <p className="text-center text-[11px] md:text-xs font-sans tracking-[0.2em] uppercase text-charcoal/70 mb-4 md:mb-5">
-                Value:{" "}
-                <span className="line-through decoration-1 text-charcoal/50">
-                  $17.00
-                </span>{" "}
-                <span className="text-emerald-900 font-bold not-italic">
-                  (FREE Today)
-                </span>
-              </p>
-
-              <ul className="space-y-2 md:space-y-2.5 max-w-xl mx-auto">
-                <li className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug">
-                  <span className="text-gold flex-shrink-0 mt-0.5" aria-hidden="true">
+              <ul className="space-y-3 md:space-y-4 max-w-xl mx-auto">
+                <li
+                  className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug"
+                  data-testid="bonus-item-1"
+                >
+                  <span
+                    className="text-gold flex-shrink-0 mt-0.5 text-base md:text-lg"
+                    aria-hidden="true"
+                  >
                     ✓
                   </span>
                   <span>
-                    <span className="font-bold text-emerald-900">
-                      Avoid overpaying:
-                    </span>{" "}
-                    How to spot &ldquo;Tourist Menus&rdquo; from a block away.
+                    <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
+                      <span aria-hidden="true">🎁 </span>BONUS #1: The Tourist Trap Map (PDF)
+                    </span>
+                    <span className="block mt-1">
+                      Visual guide to avoid the 10 biggest mistakes Americans
+                      make in Italy.
+                    </span>
                   </span>
                 </li>
-                <li className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug">
-                  <span className="text-gold flex-shrink-0 mt-0.5" aria-hidden="true">
+                <li
+                  className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug"
+                  data-testid="bonus-item-2"
+                >
+                  <span
+                    className="text-gold flex-shrink-0 mt-0.5 text-base md:text-lg"
+                    aria-hidden="true"
+                  >
                     ✓
                   </span>
                   <span>
-                    <span className="font-bold text-emerald-900">
-                      Earn respect:
-                    </span>{" "}
-                    The simple social shifts that change how locals treat you.
-                  </span>
-                </li>
-                <li className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug">
-                  <span className="text-gold flex-shrink-0 mt-0.5" aria-hidden="true">
-                    ✓
-                  </span>
-                  <span>
-                    <span className="font-bold text-emerald-900">
-                      First-trip insurance:
-                    </span>{" "}
-                    The 24-hour arrival checklist for a seamless start.
+                    <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
+                      <span aria-hidden="true">🎧 </span>BONUS #2: Pronunciation &amp; Social Scripts Audio Guide (MP3)
+                    </span>
+                    <span className="block mt-1">
+                      Master the rhythm of the language. Audio scripts for
+                      restaurants, coffee bars, and greetings to sound like a
+                      local.
+                    </span>
                   </span>
                 </li>
               </ul>
+
+              <p className="text-center text-[11px] md:text-xs font-sans tracking-[0.2em] uppercase text-charcoal/70 mt-5 md:mt-6">
+                Total Value:{" "}
+                <span className="line-through decoration-1 text-charcoal/50">
+                  $143.00
+                </span>
+              </p>
             </div>
 
             {/* ============ DIVIDER ============ */}
@@ -110,13 +108,10 @@ export function ValueStack() {
               className="px-6 sm:px-8 md:px-12 pt-4 md:pt-5 pb-6 md:pb-8"
               data-testid="value-stack-offer"
             >
+              <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
+                Current Offer
+              </p>
               <div className="flex items-baseline justify-center gap-3 md:gap-4 mb-1">
-                <span
-                  className="font-serif text-2xl md:text-3xl text-charcoal/40 line-through decoration-1"
-                  data-testid="text-price-original"
-                >
-                  $99
-                </span>
                 <span
                   className="font-serif text-5xl md:text-6xl text-emerald-900 font-bold tracking-tight"
                   data-testid="text-price-current"
@@ -125,7 +120,7 @@ export function ValueStack() {
                 </span>
               </div>
               <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-4 md:mb-5">
-                USD · One-Time Investment
+                Introductory Pricing
               </p>
 
               <div className="text-center">
