@@ -125,7 +125,7 @@ export function ValueStack() {
 
               <div className="text-center">
                 <Button
-                  href="https://www.themodernprotocols.com/cart/47838889804002:1"
+                  href="https://e4xyke-kt.myshopify.com/cart/47838889804002:1?channel=buy_button"
                   onClick={handleAddToCart}
                   className="w-full sm:w-auto text-base md:text-xl py-4 md:py-5 px-8 md:px-14 mb-3 uppercase tracking-[0.15em]"
                   style={{ color: "#C9A961" }}
