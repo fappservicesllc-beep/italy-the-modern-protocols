@@ -131,13 +131,6 @@ export function ValueStack() {
                   </span>
                 </li>
               </ul>
-
-              <p className="text-center text-[11px] md:text-xs font-sans tracking-[0.2em] uppercase text-charcoal/70 mt-5 md:mt-6">
-                Total Value:{" "}
-                <span className="line-through decoration-1 text-charcoal/50">
-                  $143.00
-                </span>
-              </p>
             </div>
 
             {/* ============ DIVIDER ============ */}
