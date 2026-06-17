@@ -1,15 +1,59 @@
+import { useState } from "react";
 import { FadeIn } from "./ui/FadeIn";
 import { Button } from "./ui/Button";
 
+// Shopify variant IDs (used for Meta Pixel content_ids only — checkout
+// permalinks below are pre-built bundle URLs provided by the merchant).
+const MAIN_VARIANT_ID = "47838889804002";
+const CULINARY_VAULT_VARIANT_ID = "47904170868962";
+const GOLDEN_PHRASES_VARIANT_ID = "47904166871266";
+const BUNDLE_BOTH_VARIANT_ID = "47904162939106";
+
+// Pre-built Shopify checkout permalinks — one per selection combo.
+const CHECKOUT_URL_MAIN_ONLY =
+  "https://e4xyke-kt.myshopify.com/cart/47838889804002:1?channel=buy_button";
+const CHECKOUT_URL_MAIN_PLUS_CULINARY =
+  "https://www.themodernprotocols.com/cart/47904170868962:1";
+const CHECKOUT_URL_MAIN_PLUS_PHRASES =
+  "https://www.themodernprotocols.com/cart/47904166871266:1";
+const CHECKOUT_URL_MAIN_PLUS_BOTH =
+  "https://www.themodernprotocols.com/cart/47904162939106:1";
+
 export function ValueStack() {
+  const [bumpCulinary, setBumpCulinary] = useState(false);
+  const [bumpPhrases, setBumpPhrases] = useState(false);
+
+  const basePrice = 10.95;
+  const bumpPrice = 8.99;
+  const totalPrice =
+    basePrice +
+    (bumpCulinary ? bumpPrice : 0) +
+    (bumpPhrases ? bumpPrice : 0);
+
+  const buildCheckoutUrl = () => {
+    if (bumpCulinary && bumpPhrases) return CHECKOUT_URL_MAIN_PLUS_BOTH;
+    if (bumpCulinary) return CHECKOUT_URL_MAIN_PLUS_CULINARY;
+    if (bumpPhrases) return CHECKOUT_URL_MAIN_PLUS_PHRASES;
+    return CHECKOUT_URL_MAIN_ONLY;
+  };
+
   const handleAddToCart = () => {
     if (typeof window !== "undefined" && window.fbq) {
+      const contentIds: string[] = [];
+      if (bumpCulinary && bumpPhrases) {
+        contentIds.push(BUNDLE_BOTH_VARIANT_ID);
+      } else if (bumpCulinary) {
+        contentIds.push(CULINARY_VAULT_VARIANT_ID);
+      } else if (bumpPhrases) {
+        contentIds.push(GOLDEN_PHRASES_VARIANT_ID);
+      } else {
+        contentIds.push(MAIN_VARIANT_ID);
+      }
       window.fbq("track", "AddToCart", {
-        content_name:
-          "The Italy Insider Protocol Guide + Tourist Trap Map",
-        content_ids: ["47838889804002"],
+        content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
+        content_ids: contentIds,
         content_type: "product",
-        value: 10.95,
+        value: totalPrice,
         currency: "USD",
       });
     }
@@ -109,23 +153,66 @@ export function ValueStack() {
               data-testid="value-stack-offer"
             >
               <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
-                Current Offer
+                {bumpCulinary || bumpPhrases ? "Your Total" : "Current Offer"}
               </p>
               <div className="flex items-baseline justify-center gap-3 md:gap-4 mb-1">
                 <span
-                  className="font-serif text-5xl md:text-6xl text-emerald-900 font-bold tracking-tight"
+                  className="font-serif text-5xl md:text-6xl text-emerald-900 font-bold tracking-tight transition-all duration-300"
                   data-testid="text-price-current"
+                  key={totalPrice}
                 >
-                  $10.95
+                  ${totalPrice.toFixed(2)}
                 </span>
               </div>
               <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-4 md:mb-5">
-                Introductory Pricing
+                {bumpCulinary || bumpPhrases ? "Bundle Total" : "Introductory Pricing"}
               </p>
+
+              {(bumpCulinary || bumpPhrases) && (
+                <div
+                  className="max-w-sm mx-auto mb-5 md:mb-6 text-xs md:text-sm font-sans bg-ivory border border-gold/30 rounded-sm px-4 py-3 space-y-1.5"
+                  data-testid="order-summary"
+                >
+                  <div className="flex justify-between text-charcoal/80">
+                    <span>Italy Insider Protocol</span>
+                    <span className="tabular-nums">$10.95</span>
+                  </div>
+                  {bumpCulinary && (
+                    <div className="flex justify-between text-charcoal/80" data-testid="summary-line-culinary">
+                      <span>+ Culinary Intelligence Vault</span>
+                      <span className="tabular-nums">$8.99</span>
+                    </div>
+                  )}
+                  {bumpPhrases && (
+                    <div className="flex justify-between text-charcoal/80" data-testid="summary-line-phrases">
+                      <span>+ The Golden 50 Phrases</span>
+                      <span className="tabular-nums">$8.99</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between font-bold text-emerald-900 pt-1.5 mt-1.5 border-t border-gold/30">
+                    <span className="uppercase tracking-wider text-[11px] md:text-xs">Total</span>
+                    <span className="tabular-nums text-sm md:text-base" data-testid="summary-total">
+                      ${totalPrice.toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="pt-3 mt-2 border-t border-gold/30">
+                    <Button
+                      href={buildCheckoutUrl()}
+                      onClick={handleAddToCart}
+                      className="w-full text-xs md:text-sm py-2.5 md:py-3 px-4 uppercase tracking-[0.15em]"
+                      style={{ color: "#C9A961" }}
+                      testId="button-checkout-summary"
+                    >
+                      Checkout — ${totalPrice.toFixed(2)}
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               <div className="text-center">
                 <Button
-                  href="https://e4xyke-kt.myshopify.com/cart/47838889804002:1?channel=buy_button"
+                  href={buildCheckoutUrl()}
                   onClick={handleAddToCart}
                   className="w-full sm:w-auto text-base md:text-xl py-4 md:py-5 px-8 md:px-14 mb-3 uppercase tracking-[0.15em]"
                   style={{ color: "#C9A961" }}
@@ -141,6 +228,118 @@ export function ValueStack() {
                   Travelers from New York, Miami, and Chicago are already using
                   this protocol before their Italy trips.
                 </p>
+              </div>
+
+              {/* ============ ORDER BUMPS ============ */}
+              <div className="mt-6 md:mt-8 space-y-4" data-testid="order-bumps">
+                <div className="text-center mb-1">
+                  <div className="inline-flex items-center gap-3">
+                    <div className="h-px w-6 md:w-8 bg-gold/50" />
+                    <span className="text-charcoal/60 font-sans text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase">
+                      One-Time Add-Ons
+                    </span>
+                    <div className="h-px w-6 md:w-8 bg-gold/50" />
+                  </div>
+                </div>
+
+                {/* Order Bump #1: Culinary Intelligence Vault */}
+                <label
+                  htmlFor="bump-culinary"
+                  className={`flex gap-3 md:gap-4 p-3 md:p-4 rounded-sm border-2 border-dashed cursor-pointer transition-colors ${
+                    bumpCulinary
+                      ? "border-emerald-900 bg-emerald-900/5"
+                      : "border-gold/60 bg-ivory hover:border-emerald-900/60 animate-bump-glow"
+                  }`}
+                  data-testid="order-bump-culinary"
+                >
+                  <input
+                    id="bump-culinary"
+                    type="checkbox"
+                    checked={bumpCulinary}
+                    onChange={(e) => setBumpCulinary(e.target.checked)}
+                    className="mt-1 w-5 h-5 flex-shrink-0 accent-emerald-900 cursor-pointer"
+                    data-testid="checkbox-bump-culinary"
+                  />
+                  <img
+                    src="/culinary-vault.png"
+                    alt="The Culinary Intelligence Vault"
+                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                  />
+                  <div className="flex-1 text-left">
+                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
+                      🍝 WAIT! Don&rsquo;t eat like a tourist...{" "}
+                      <span className="text-gold">(Save 60%)</span>
+                    </p>
+                    <span
+                      className="inline-block mt-1.5 text-[9px] md:text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-emerald-900 bg-gold/25 border border-gold/50 rounded-sm px-2 py-0.5"
+                      data-testid="badge-highly-recommended"
+                    >
+                      ★ Highly Recommended
+                    </span>
+                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                      Most visitors fall into &ldquo;tourist traps&rdquo; with
+                      frozen food and plastic menus. Add my{" "}
+                      <em>Culinary Vault</em> to your order and get my private
+                      map of hidden trattorias, the 3-step rule to spotting a
+                      fake gelato shop, and the regional food secrets only
+                      locals know. Eat like a king for a fraction of the price.
+                    </p>
+                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                      ✓ Add to my order for only{" "}
+                      <span className="text-base md:text-lg">$8.99</span>
+                    </p>
+                  </div>
+                </label>
+
+                {/* Order Bump #2: The 50 Golden Phrases Guide */}
+                <label
+                  htmlFor="bump-phrases"
+                  className={`flex gap-3 md:gap-4 p-3 md:p-4 rounded-sm border-2 border-dashed cursor-pointer transition-colors ${
+                    bumpPhrases
+                      ? "border-emerald-900 bg-emerald-900/5"
+                      : "border-gold/60 bg-ivory hover:border-emerald-900/60 animate-bump-glow [animation-delay:1.3s]"
+                  }`}
+                  data-testid="order-bump-phrases"
+                >
+                  <input
+                    id="bump-phrases"
+                    type="checkbox"
+                    checked={bumpPhrases}
+                    onChange={(e) => setBumpPhrases(e.target.checked)}
+                    className="mt-1 w-5 h-5 flex-shrink-0 accent-emerald-900 cursor-pointer"
+                    data-testid="checkbox-bump-phrases"
+                  />
+                  <img
+                    src="/golden-phrases.png"
+                    alt="The 50 Golden Phrases Guide"
+                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                  />
+                  <div className="flex-1 text-left">
+                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight flex items-center gap-2">
+                      <span
+                        aria-label="Italian flag"
+                        className="inline-flex h-3.5 w-5 md:h-4 md:w-6 overflow-hidden rounded-[2px] border border-charcoal/20 flex-shrink-0"
+                      >
+                        <span className="flex-1 bg-[#009246]" />
+                        <span className="flex-1 bg-white" />
+                        <span className="flex-1 bg-[#ce2b37]" />
+                      </span>
+                      <span>Unlock Respect with the &ldquo;Golden 50&rdquo;</span>
+                    </p>
+                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                      English is fine, but the right Italian phrase at the
+                      right time changes everything. I&rsquo;ve curated the 50
+                      specific phrases that unlock better tables, rare wine
+                      bottles, and the respect of every waiter and shopkeeper
+                      you meet. No grammar, no fluff&mdash;just the phonetics
+                      of belonging. A must-have for your phone.
+                    </p>
+                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                      ✓ Add to my order for only{" "}
+                      <span className="text-base md:text-lg">$8.99</span>
+                    </p>
+                  </div>
+                </label>
               </div>
               <p className="text-xs md:text-sm text-charcoal/60 font-sans text-center mt-2.5 italic">
                 30-Day Money-Back Guarantee. If you don&rsquo;t feel more
