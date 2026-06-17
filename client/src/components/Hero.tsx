@@ -35,21 +35,28 @@ export function Hero() {
             </FadeIn>
 
             <FadeIn delay={0.3}>
-              <p className="text-lg md:text-xl text-charcoal/80 font-serif italic mb-8">
-                (Even If You Don&rsquo;t Speak the Language)
+              <p
+                className="text-lg md:text-xl text-charcoal/80 leading-relaxed font-sans font-light mb-8"
+                data-testid="text-hero-subheadline"
+              >
+                The exact system 847 travelers used to eat, move and speak like
+                locals — without spending years learning Italian.
               </p>
             </FadeIn>
 
             <FadeIn delay={0.4}>
-              <p className="text-base md:text-lg text-charcoal/70 leading-relaxed font-sans font-light">
-                Bypass the &ldquo;Tourist Wall,&rdquo; secure the best tables,
-                and earn immediate respect with the Heritage Intelligence
-                protocol used by insiders.
-              </p>
+              <div>
+                <Button
+                  className="w-full sm:w-auto"
+                  testId="button-hero-get-protocol"
+                >
+                  Get The Protocol Now
+                </Button>
+              </div>
             </FadeIn>
           </div>
 
-          <div className="order-1 lg:order-2 relative">
+          <div className="order-1 lg:order-2 relative hidden lg:block">
             <FadeIn delay={0.3} direction="left">
               <div className="relative mx-auto max-w-[400px] lg:max-w-none">
                 <div className="absolute inset-0 border border-gold/30 translate-x-4 translate-y-4 rounded-sm -z-10" />
@@ -60,17 +67,6 @@ export function Hero() {
                   data-testid="img-hero-protocol"
                   loading="eager"
                 />
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.5}>
-              <div className="mt-8 flex justify-center">
-                <Button
-                  className="w-full sm:w-auto"
-                  testId="button-hero-get-protocol"
-                >
-                  Get The Protocol Now
-                </Button>
               </div>
             </FadeIn>
           </div>
