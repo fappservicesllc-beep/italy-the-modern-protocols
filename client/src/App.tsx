@@ -12,6 +12,7 @@ import { Proof } from "@/components/Proof";
 import { FAQ } from "@/components/FAQ";
 import { ValueStack } from "@/components/ValueStack";
 import { Footer } from "@/components/Footer";
+import { RecentPurchaseToast } from "@/components/RecentPurchaseToast";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <ValueStack />
       </main>
       <Footer />
+      <RecentPurchaseToast />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FadeIn } from "./ui/FadeIn";
 import { Button } from "./ui/Button";
+import { UpsellExitPopup } from "./UpsellExitPopup";
 
 // Shopify variant IDs (used for Meta Pixel content_ids only — checkout
 // permalinks below are pre-built bundle URLs provided by the merchant).
@@ -18,10 +19,20 @@ const CHECKOUT_URL_MAIN_PLUS_PHRASES =
   "https://www.themodernprotocols.com/cart/47904166871266:1";
 const CHECKOUT_URL_MAIN_PLUS_BOTH =
   "https://www.themodernprotocols.com/cart/47904162939106:1";
+// Exit-popup-only: bundle with 30% off pre-applied at this Shopify permalink.
+const CHECKOUT_URL_UPSELL_DISCOUNTED =
+  "https://www.themodernprotocols.com/cart/47912373911778:1";
+// Exit-popup-only: "No thanks" decline path — main product only on primary domain.
+const CHECKOUT_URL_UPSELL_DECLINE =
+  "https://www.themodernprotocols.com/cart/47838889804002:1";
 
 export function ValueStack() {
   const [bumpCulinary, setBumpCulinary] = useState(false);
   const [bumpPhrases, setBumpPhrases] = useState(false);
+  const [upsellOpen, setUpsellOpen] = useState(false);
+  // Once the user has been shown the popup and declined (or accepted), don't
+  // re-trigger it again on subsequent clicks during the same session.
+  const [upsellShown, setUpsellShown] = useState(false);
 
   const basePrice = 10.95;
   const bumpPrice = 8.99;
@@ -35,6 +46,49 @@ export function ValueStack() {
     if (bumpCulinary) return CHECKOUT_URL_MAIN_PLUS_CULINARY;
     if (bumpPhrases) return CHECKOUT_URL_MAIN_PLUS_PHRASES;
     return CHECKOUT_URL_MAIN_ONLY;
+  };
+
+  // Intercepts a checkout button click. If the user has NOT selected any
+  // order bump, we prevent navigation and open the exit-intent upsell popup
+  // instead. If any bump is checked, we let the click proceed normally and
+  // just fire the AddToCart pixel event.
+  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const noBumpsSelected = !bumpCulinary && !bumpPhrases;
+    if (noBumpsSelected && !upsellShown) {
+      e.preventDefault();
+      setUpsellShown(true);
+      setUpsellOpen(true);
+      return;
+    }
+    handleAddToCart();
+  };
+
+  // Fires the upsell's "Yes, add both" CTA — track an AddToCart for the full
+  // bundle before the popup's anchor takes the user to the bundle permalink.
+  const handleUpsellAccept = () => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "AddToCart", {
+        content_name: "Italy Insider Protocol — Full Bundle (Upsell)",
+        content_ids: [BUNDLE_BOTH_VARIANT_ID],
+        content_type: "product",
+        value: 23.54,
+        currency: "USD",
+      });
+    }
+  };
+
+  // Fires when the user declines the upsell — track an AddToCart for the
+  // main product only before navigating to the main-only checkout.
+  const handleUpsellDecline = () => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "AddToCart", {
+        content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
+        content_ids: [MAIN_VARIANT_ID],
+        content_type: "product",
+        value: basePrice,
+        currency: "USD",
+      });
+    }
   };
 
   const handleAddToCart = () => {
@@ -192,7 +246,7 @@ export function ValueStack() {
                   <div className="pt-3 mt-2 border-t border-gold/30">
                     <Button
                       href={buildCheckoutUrl()}
-                      onClick={handleAddToCart}
+                      onClick={handleCheckoutClick}
                       className="w-full text-xs md:text-sm py-2.5 md:py-3 px-4 uppercase tracking-[0.15em]"
                       style={{ color: "#C9A961" }}
                       testId="button-checkout-summary"
@@ -206,7 +260,7 @@ export function ValueStack() {
               <div className="text-center">
                 <Button
                   href={buildCheckoutUrl()}
-                  onClick={handleAddToCart}
+                  onClick={handleCheckoutClick}
                   className="w-full sm:w-auto text-base md:text-xl py-4 md:py-5 px-8 md:px-14 mb-3 uppercase tracking-[0.15em]"
                   style={{ color: "#C9A961" }}
                   testId="button-unlock-access"
@@ -358,6 +412,15 @@ export function ValueStack() {
           </div>
         </FadeIn>
       </div>
+
+      <UpsellExitPopup
+        open={upsellOpen}
+        onClose={() => setUpsellOpen(false)}
+        acceptUrl={CHECKOUT_URL_UPSELL_DISCOUNTED}
+        declineUrl={CHECKOUT_URL_UPSELL_DECLINE}
+        onAccept={handleUpsellAccept}
+        onDecline={handleUpsellDecline}
+      />
     </section>
   );
 }

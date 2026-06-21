@@ -58,7 +58,7 @@ export function AnnouncementBar() {
       data-testid="banner-announcement"
     >
       <span>
-        🔥 Introductory Price: $10.95 — Price increases to $27 on Sunday. Time remaining:{" "}
+        🔥 Offer Ends Tonight: $10.95 — Price increases to $27 at midnight. Time remaining:{" "}
       </span>
       <span
         data-testid="text-countdown"
