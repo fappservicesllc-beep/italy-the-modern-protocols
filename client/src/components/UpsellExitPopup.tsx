@@ -15,15 +15,18 @@ interface UpsellExitPopupProps {
 
 // Pricing constants — kept here so the popup is self-contained and
 // renders the same numbers shown on the page.
-const MAIN_PRICE = 10.95;
+const MAIN_PRICE = 27.0;
 const BUMP_PRICE = 8.99;
 const BUMP_COUNT = 2;
-const BUMPS_TOTAL = BUMP_PRICE * BUMP_COUNT; // 17.98
 const DISCOUNT_RATE = 0.3;
-const BUMPS_DISCOUNTED = BUMPS_TOTAL * (1 - DISCOUNT_RATE); // 12.586
-const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 28.93
-const BUNDLE_DISCOUNTED = MAIN_PRICE + BUMPS_DISCOUNTED; // 23.536
-const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 5.394
+// Round each bump's discounted price to 2 decimals BEFORE summing so the
+// displayed line items add up exactly to the bundle total ($6.29 x 2 = $12.58).
+const BUMP_DISCOUNTED = Math.round(BUMP_PRICE * (1 - DISCOUNT_RATE) * 100) / 100; // 6.29
+const BUMPS_TOTAL = BUMP_PRICE * BUMP_COUNT; // 17.98
+const BUMPS_DISCOUNTED = BUMP_DISCOUNTED * BUMP_COUNT; // 12.58
+const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 44.98
+const BUNDLE_DISCOUNTED = MAIN_PRICE + BUMPS_DISCOUNTED; // 39.58
+const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 5.40
 
 const fmt = (n: number) => `$${n.toFixed(2)}`;
 
@@ -177,7 +180,7 @@ export function UpsellExitPopup({
                   {fmt(BUMP_PRICE)}
                 </span>{" "}
                 <span className="font-bold text-emerald-900">
-                  {fmt(BUMP_PRICE * (1 - DISCOUNT_RATE))}
+                  {fmt(BUMP_DISCOUNTED)}
                 </span>
               </div>
             </div>
@@ -202,7 +205,7 @@ export function UpsellExitPopup({
                   {fmt(BUMP_PRICE)}
                 </span>{" "}
                 <span className="font-bold text-emerald-900">
-                  {fmt(BUMP_PRICE * (1 - DISCOUNT_RATE))}
+                  {fmt(BUMP_DISCOUNTED)}
                 </span>
               </div>
             </div>

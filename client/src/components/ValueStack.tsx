@@ -34,7 +34,7 @@ export function ValueStack() {
   // re-trigger it again on subsequent clicks during the same session.
   const [upsellShown, setUpsellShown] = useState(false);
 
-  const basePrice = 10.95;
+  const basePrice = 27;
   const bumpPrice = 8.99;
   const totalPrice =
     basePrice +
@@ -212,7 +212,7 @@ export function ValueStack() {
                 </span>
               </div>
               <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-4 md:mb-5">
-                {bumpCulinary || bumpPhrases ? "Bundle Total" : "Introductory Pricing"}
+                {bumpCulinary || bumpPhrases ? "Bundle Total" : "One-Time Payment"}
               </p>
 
               {(bumpCulinary || bumpPhrases) && (
@@ -222,7 +222,7 @@ export function ValueStack() {
                 >
                   <div className="flex justify-between text-charcoal/80">
                     <span>Italy Insider Protocol</span>
-                    <span className="tabular-nums">$10.95</span>
+                    <span className="tabular-nums">$27.00</span>
                   </div>
                   {bumpCulinary && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-culinary">
