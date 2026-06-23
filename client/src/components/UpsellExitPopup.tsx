@@ -17,16 +17,19 @@ interface UpsellExitPopupProps {
 // renders the same numbers shown on the page.
 const MAIN_PRICE = 27.0;
 const BUMP_PRICE = 8.99;
-const BUMP_COUNT = 2;
+const BUMP_COUNT = 3;
 const DISCOUNT_RATE = 0.3;
 // Round each bump's discounted price to 2 decimals BEFORE summing so the
-// displayed line items add up exactly to the bundle total ($6.29 x 2 = $12.58).
+// displayed line items match what the user mentally adds up. The 30% discount
+// applies to the WHOLE bundle (main + 3 bumps), and the Shopify permalink
+// charges the bundle-level rounded total of $37.78, which is the source of
+// truth shown in the "Today, with 30% off" row.
 const BUMP_DISCOUNTED = Math.round(BUMP_PRICE * (1 - DISCOUNT_RATE) * 100) / 100; // 6.29
-const BUMPS_TOTAL = BUMP_PRICE * BUMP_COUNT; // 17.98
-const BUMPS_DISCOUNTED = BUMP_DISCOUNTED * BUMP_COUNT; // 12.58
-const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 44.98
-const BUNDLE_DISCOUNTED = MAIN_PRICE + BUMPS_DISCOUNTED; // 39.58
-const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 5.40
+const BUMPS_TOTAL = BUMP_PRICE * BUMP_COUNT; // 26.97
+const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 53.97
+// Bundle total matches the Shopify permalink (47920323494114): $37.78.
+const BUNDLE_DISCOUNTED = 37.78;
+const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 16.19
 
 const fmt = (n: number) => `$${n.toFixed(2)}`;
 
@@ -153,7 +156,7 @@ export function UpsellExitPopup({
             Before you check out…
           </h2>
           <p className="font-serif italic text-charcoal/80 text-center mt-2 text-base sm:text-lg leading-snug">
-            Add both insider companions and{" "}
+            Add all three insider companions and{" "}
             <span className="text-emerald-900 font-semibold">save 30%</span>{" "}
             — only on this page, only right now.
           </p>
@@ -162,17 +165,17 @@ export function UpsellExitPopup({
           <div className="mt-5 space-y-2.5">
             <div
               className="flex items-start gap-3 p-3 bg-ivory-100 border border-gold/30 rounded-sm"
-              data-testid="upsell-line-culinary"
+              data-testid="upsell-line-airport"
             >
               <span className="text-gold text-lg leading-none mt-0.5" aria-hidden="true">
                 ✓
               </span>
               <div className="flex-1 text-sm">
                 <p className="font-serif font-bold text-emerald-900 leading-tight">
-                  🍝 The Culinary Intelligence Vault
+                  🛬 The Arrival Protocol
                 </p>
                 <p className="text-charcoal/75 text-xs mt-0.5 leading-snug">
-                  Hidden trattorias, the gelato rule, regional food secrets.
+                  Fixed-rate taxis, local SIMs, and how to spot fake drivers.
                 </p>
               </div>
               <div className="text-right text-xs tabular-nums whitespace-nowrap">
@@ -198,6 +201,31 @@ export function UpsellExitPopup({
                 </p>
                 <p className="text-charcoal/75 text-xs mt-0.5 leading-snug">
                   The exact phrases that unlock respect, tables, and rare wines.
+                </p>
+              </div>
+              <div className="text-right text-xs tabular-nums whitespace-nowrap">
+                <span className="text-charcoal/50 line-through">
+                  {fmt(BUMP_PRICE)}
+                </span>{" "}
+                <span className="font-bold text-emerald-900">
+                  {fmt(BUMP_DISCOUNTED)}
+                </span>
+              </div>
+            </div>
+
+            <div
+              className="flex items-start gap-3 p-3 bg-ivory-100 border border-gold/30 rounded-sm"
+              data-testid="upsell-line-culinary"
+            >
+              <span className="text-gold text-lg leading-none mt-0.5" aria-hidden="true">
+                ✓
+              </span>
+              <div className="flex-1 text-sm">
+                <p className="font-serif font-bold text-emerald-900 leading-tight">
+                  🍝 The Culinary Intelligence Vault
+                </p>
+                <p className="text-charcoal/75 text-xs mt-0.5 leading-snug">
+                  Hidden trattorias, the gelato rule, regional food secrets.
                 </p>
               </div>
               <div className="text-right text-xs tabular-nums whitespace-nowrap">

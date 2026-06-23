@@ -1,14 +1,17 @@
 import { FadeIn } from "./ui/FadeIn";
 
 const milestones = [
-  { when: "By day one,", what: "your transit is seamless." },
+  {
+    when: "By day one,",
+    what: "your transit is seamless. You exit the airport with a fixed-rate taxi, a local SIM, and zero chaos.",
+  },
   {
     when: "By day three,",
-    what: "you are being greeted by name at your local café.",
+    what: "the waiter at your local café greets you by name — because you used the right honorific the first time.",
   },
   {
     when: "By day seven,",
-    what: "you are navigating regional social cues that most expats take years to learn.",
+    what: "you are navigating regional social cues that most expats spend years trying to learn — and you did it in a weekend.",
   },
 ];
 

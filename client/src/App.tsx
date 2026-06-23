@@ -8,6 +8,7 @@ import { WhatYouGet } from "@/components/WhatYouGet";
 import { WhoFor } from "@/components/WhoFor";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Proof } from "@/components/Proof";
+import { Testimonials } from "@/components/Testimonials";
 import { FAQ } from "@/components/FAQ";
 import { ValueStack } from "@/components/ValueStack";
 import { Footer } from "@/components/Footer";
@@ -27,6 +28,7 @@ export default function App() {
         <WhoFor />
         <HowItWorks />
         <Proof />
+        <Testimonials />
         <FAQ />
         <ValueStack />
       </main>

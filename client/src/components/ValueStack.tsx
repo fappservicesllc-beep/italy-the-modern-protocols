@@ -19,6 +19,18 @@ const CHECKOUT_URL_MAIN_PLUS_PHRASES =
   "https://www.themodernprotocols.com/cart/47904166871266:1";
 const CHECKOUT_URL_MAIN_PLUS_BOTH =
   "https://www.themodernprotocols.com/cart/47904162939106:1";
+// All three bumps (Culinary + Phrases + Airport) — full bundle permalink.
+const CHECKOUT_URL_MAIN_PLUS_ALL_THREE =
+  "https://www.themodernprotocols.com/cart/47920323494114:1";
+// Main + Culinary + Airport (Phrases NOT selected).
+const CHECKOUT_URL_MAIN_PLUS_CULINARY_AIRPORT =
+  "https://www.themodernprotocols.com/cart/47920328409314:1";
+// Main + Phrases + Airport (Culinary NOT selected).
+const CHECKOUT_URL_MAIN_PLUS_PHRASES_AIRPORT =
+  "https://www.themodernprotocols.com/cart/47920329261282:1";
+// Main + Airport only (Culinary and Phrases NOT selected).
+const CHECKOUT_URL_MAIN_PLUS_AIRPORT =
+  "https://www.themodernprotocols.com/cart/47920322117858:1";
 // Exit-popup-only: bundle with 30% off pre-applied at this Shopify permalink.
 const CHECKOUT_URL_UPSELL_DISCOUNTED =
   "https://www.themodernprotocols.com/cart/47912373911778:1";
@@ -27,8 +39,9 @@ const CHECKOUT_URL_UPSELL_DECLINE =
   "https://www.themodernprotocols.com/cart/47838889804002:1";
 
 export function ValueStack() {
-  const [bumpCulinary, setBumpCulinary] = useState(false);
-  const [bumpPhrases, setBumpPhrases] = useState(false);
+  const [bumpCulinary, setBumpCulinary] = useState(true);
+  const [bumpPhrases, setBumpPhrases] = useState(true);
+  const [bumpAirport, setBumpAirport] = useState(true);
   const [upsellOpen, setUpsellOpen] = useState(false);
   // Once the user has been shown the popup and declined (or accepted), don't
   // re-trigger it again on subsequent clicks during the same session.
@@ -39,12 +52,20 @@ export function ValueStack() {
   const totalPrice =
     basePrice +
     (bumpCulinary ? bumpPrice : 0) +
-    (bumpPhrases ? bumpPrice : 0);
+    (bumpPhrases ? bumpPrice : 0) +
+    (bumpAirport ? bumpPrice : 0);
 
   const buildCheckoutUrl = () => {
+    if (bumpCulinary && bumpPhrases && bumpAirport)
+      return CHECKOUT_URL_MAIN_PLUS_ALL_THREE;
+    if (bumpCulinary && bumpAirport && !bumpPhrases)
+      return CHECKOUT_URL_MAIN_PLUS_CULINARY_AIRPORT;
+    if (bumpPhrases && bumpAirport && !bumpCulinary)
+      return CHECKOUT_URL_MAIN_PLUS_PHRASES_AIRPORT;
     if (bumpCulinary && bumpPhrases) return CHECKOUT_URL_MAIN_PLUS_BOTH;
     if (bumpCulinary) return CHECKOUT_URL_MAIN_PLUS_CULINARY;
     if (bumpPhrases) return CHECKOUT_URL_MAIN_PLUS_PHRASES;
+    if (bumpAirport) return CHECKOUT_URL_MAIN_PLUS_AIRPORT;
     return CHECKOUT_URL_MAIN_ONLY;
   };
 
@@ -53,7 +74,7 @@ export function ValueStack() {
   // instead. If any bump is checked, we let the click proceed normally and
   // just fire the AddToCart pixel event.
   const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const noBumpsSelected = !bumpCulinary && !bumpPhrases;
+    const noBumpsSelected = !bumpCulinary && !bumpPhrases && !bumpAirport;
     if (noBumpsSelected && !upsellShown) {
       e.preventDefault();
       setUpsellShown(true);
@@ -200,7 +221,7 @@ export function ValueStack() {
               data-testid="value-stack-offer"
             >
               <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
-                {bumpCulinary || bumpPhrases ? "Your Total" : "Current Offer"}
+                {bumpCulinary || bumpPhrases || bumpAirport ? "Your Total" : "Current Offer"}
               </p>
               <div className="flex items-baseline justify-center gap-3 md:gap-4 mb-1">
                 <span
@@ -211,11 +232,18 @@ export function ValueStack() {
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
-              <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-4 md:mb-5">
-                {bumpCulinary || bumpPhrases ? "Bundle Total" : "One-Time Payment"}
+              <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-3 md:mb-4">
+                {bumpCulinary || bumpPhrases || bumpAirport ? "Bundle Total" : "One-Time Payment"}
               </p>
 
-              {(bumpCulinary || bumpPhrases) && (
+              <p
+                className="text-center font-serif italic text-base md:text-xl text-gold/90 mb-5 md:mb-6 px-4 leading-snug"
+                data-testid="text-price-tagline"
+              >
+                Everything you need to navigate Italy like a local — for less than one bad meal in Rome.
+              </p>
+
+              {(bumpCulinary || bumpPhrases || bumpAirport) && (
                 <div
                   className="max-w-sm mx-auto mb-5 md:mb-6 text-xs md:text-sm font-sans bg-ivory border border-gold/30 rounded-sm px-4 py-3 space-y-1.5"
                   data-testid="order-summary"
@@ -233,6 +261,12 @@ export function ValueStack() {
                   {bumpPhrases && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-phrases">
                       <span>+ The Golden 50 Phrases</span>
+                      <span className="tabular-nums">$8.99</span>
+                    </div>
+                  )}
+                  {bumpAirport && (
+                    <div className="flex justify-between text-charcoal/80" data-testid="summary-line-airport">
+                      <span>+ Airport Survival Guide</span>
                       <span className="tabular-nums">$8.99</span>
                     </div>
                   )}
@@ -289,47 +323,46 @@ export function ValueStack() {
                   </div>
                 </div>
 
-                {/* Order Bump #1: Culinary Intelligence Vault */}
+                {/* Order Bump #1: Airport Survival Guide */}
                 <label
-                  htmlFor="bump-culinary"
+                  htmlFor="bump-airport"
                   className={`flex gap-3 md:gap-4 p-3 md:p-4 rounded-sm border-2 border-dashed cursor-pointer transition-colors ${
-                    bumpCulinary
+                    bumpAirport
                       ? "border-emerald-900 bg-emerald-900/5"
                       : "border-gold/60 bg-ivory hover:border-emerald-900/60 animate-bump-glow"
                   }`}
-                  data-testid="order-bump-culinary"
+                  data-testid="order-bump-airport"
                 >
                   <input
-                    id="bump-culinary"
+                    id="bump-airport"
                     type="checkbox"
-                    checked={bumpCulinary}
-                    onChange={(e) => setBumpCulinary(e.target.checked)}
+                    checked={bumpAirport}
+                    onChange={(e) => setBumpAirport(e.target.checked)}
                     className="mt-1 w-5 h-5 flex-shrink-0 accent-emerald-900 cursor-pointer"
-                    data-testid="checkbox-bump-culinary"
+                    data-testid="checkbox-bump-airport"
                   />
                   <img
-                    src="/culinary-vault.png"
-                    alt="The Culinary Intelligence Vault"
+                    src="/airport-guide.png"
+                    alt="The Arrival Protocol — Airport Survival Guide"
                     className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
                     <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
-                      🍝 WAIT! Don&rsquo;t eat like a tourist...{" "}
+                      🛬 Don&rsquo;t land blind &mdash; Know before you go{" "}
                       <span className="text-gold">(Save 60%)</span>
                     </p>
                     <span
                       className="inline-block mt-1.5 text-[9px] md:text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-emerald-900 bg-gold/25 border border-gold/50 rounded-sm px-2 py-0.5"
-                      data-testid="badge-highly-recommended"
+                      data-testid="badge-airport-recommended"
                     >
                       ★ Highly Recommended
                     </span>
                     <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
-                      Most visitors fall into &ldquo;tourist traps&rdquo; with
-                      frozen food and plastic menus. Add my{" "}
-                      <em>Culinary Vault</em> to your order and get my private
-                      map of hidden trattorias, the 3-step rule to spotting a
-                      fake gelato shop, and the regional food secrets only
-                      locals know. Eat like a king for a fraction of the price.
+                      Most travelers lose &euro;60+ in their first hour at the
+                      airport. This guide shows you exactly how to exit FCO,
+                      MXP, and NAP &mdash; fixed-rate taxis, local SIM cards,
+                      train cut-off times, and how to spot fake drivers before
+                      they spot you.
                     </p>
                     <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
@@ -380,6 +413,55 @@ export function ValueStack() {
                       bottles, and the respect of every waiter and shopkeeper
                       you meet. No grammar, no fluff&mdash;just the phonetics
                       of belonging. A must-have for your phone.
+                    </p>
+                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                      ✓ Add to my order for only{" "}
+                      <span className="text-base md:text-lg">$8.99</span>
+                    </p>
+                  </div>
+                </label>
+
+                {/* Order Bump #3: Culinary Intelligence Vault */}
+                <label
+                  htmlFor="bump-culinary"
+                  className={`flex gap-3 md:gap-4 p-3 md:p-4 rounded-sm border-2 border-dashed cursor-pointer transition-colors ${
+                    bumpCulinary
+                      ? "border-emerald-900 bg-emerald-900/5"
+                      : "border-gold/60 bg-ivory hover:border-emerald-900/60 animate-bump-glow [animation-delay:2.6s]"
+                  }`}
+                  data-testid="order-bump-culinary"
+                >
+                  <input
+                    id="bump-culinary"
+                    type="checkbox"
+                    checked={bumpCulinary}
+                    onChange={(e) => setBumpCulinary(e.target.checked)}
+                    className="mt-1 w-5 h-5 flex-shrink-0 accent-emerald-900 cursor-pointer"
+                    data-testid="checkbox-bump-culinary"
+                  />
+                  <img
+                    src="/culinary-vault.png"
+                    alt="The Culinary Intelligence Vault"
+                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                  />
+                  <div className="flex-1 text-left">
+                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
+                      🍝 WAIT! Don&rsquo;t eat like a tourist...{" "}
+                      <span className="text-gold">(Save 60%)</span>
+                    </p>
+                    <span
+                      className="inline-block mt-1.5 text-[9px] md:text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-emerald-900 bg-gold/25 border border-gold/50 rounded-sm px-2 py-0.5"
+                      data-testid="badge-highly-recommended"
+                    >
+                      ★ Highly Recommended
+                    </span>
+                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                      Most visitors fall into &ldquo;tourist traps&rdquo; with
+                      frozen food and plastic menus. Add my{" "}
+                      <em>Culinary Vault</em> to your order and get my private
+                      map of hidden trattorias, the 3-step rule to spotting a
+                      fake gelato shop, and the regional food secrets only
+                      locals know. Eat like a king for a fraction of the price.
                     </p>
                     <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}

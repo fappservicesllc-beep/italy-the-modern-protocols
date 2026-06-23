@@ -10,16 +10,20 @@ const faqs = [
     a: "No. This focuses on the 5% of communication that yields 95% of the respect.",
   },
   {
-    q: "Will this work in all of Italy?",
-    a: 'Yes, the guide specifically covers the "Vibe Shift" between the North and South.',
+    q: "Is this only useful for first-time visitors to Italy?",
+    a: "Not at all. Most of our buyers have already been to Italy once or twice — and that's exactly why they want this. They've experienced the awkward silences, the tourist menus, and the feeling of being tolerated instead of welcomed. The Protocol is designed for anyone who wants to move through Italy with real confidence, whether it's your first trip or your fifth.",
   },
   {
-    q: "Is this just for men?",
-    a: "No, the Protocol is designed for any professional traveler who wants to lead with authority.",
+    q: "How is this different from a regular travel guidebook?",
+    a: "A guidebook tells you what to see. The Italy Insider Protocol tells you how to behave. It covers the unwritten social codes, the exact phrases that signal respect, the honorifics that open doors, and the cultural timing rules that no Lonely Planet will ever print. It's the difference between visiting Italy and experiencing it.",
   },
   {
-    q: "Does it work on my phone?",
-    a: "Yes, both the PDF and Audio are mobile-optimized for easy access in the street.",
+    q: "When do I receive the protocol after purchase?",
+    a: "Immediately. The moment your payment is confirmed, you receive a download link by email. No waiting, no shipping. You can have the full protocol on your phone within 60 seconds of purchase.",
+  },
+  {
+    q: "What if it doesn't work for me?",
+    a: "Then you pay nothing. The Italy Insider Protocol comes with a 30-day no-questions-asked guarantee. If you go through the material and feel it didn't deliver, email us and we refund you in full. We're confident enough in what's inside that we take all the risk.",
   },
 ];
 
