@@ -45,7 +45,7 @@ export function Hero() {
             </FadeIn>
 
             <FadeIn delay={0.4}>
-              <div>
+              <div className="hidden lg:block">
                 <Button
                   className="w-full sm:w-auto"
                   testId="button-hero-get-protocol"
@@ -56,7 +56,7 @@ export function Hero() {
             </FadeIn>
           </div>
 
-          <div className="order-1 lg:order-2 relative hidden lg:block">
+          <div className="order-1 lg:order-2 relative">
             <FadeIn delay={0.3} direction="left">
               <div className="relative mx-auto max-w-[400px] lg:max-w-none">
                 <div className="absolute inset-0 border border-gold/30 translate-x-4 translate-y-4 rounded-sm -z-10" />
@@ -67,6 +67,17 @@ export function Hero() {
                   data-testid="img-hero-protocol"
                   loading="eager"
                 />
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+              <div className="lg:hidden mt-6">
+                <Button
+                  className="w-full"
+                  testId="button-hero-get-protocol-mobile"
+                >
+                  Get The Protocol Now
+                </Button>
               </div>
             </FadeIn>
           </div>

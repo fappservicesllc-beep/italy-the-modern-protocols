@@ -344,7 +344,7 @@ export function ValueStack() {
                   <img
                     src="/airport-guide.jpg"
                     alt="The Arrival Protocol — Airport Survival Guide"
-                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                    className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
                     <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
@@ -392,7 +392,7 @@ export function ValueStack() {
                   <img
                     src="/golden-phrases.jpg"
                     alt="The 50 Golden Phrases Guide"
-                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                    className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
                     <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight flex items-center gap-2">
@@ -442,7 +442,7 @@ export function ValueStack() {
                   <img
                     src="/culinary-vault.jpg"
                     alt="The Culinary Intelligence Vault"
-                    className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
+                    className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
                     <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
