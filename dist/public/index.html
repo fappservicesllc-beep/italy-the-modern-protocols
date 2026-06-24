@@ -10,31 +10,70 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload above-the-fold hero image to improve LCP on mobile -->
+    <link rel="preload" as="image" href="/protocol-hero.jpg" fetchpriority="high" />
+
+    <!-- Google Fonts loaded non-render-blocking via the print-onload swap.
+         font-display: swap is already set in the Google Fonts URL (&display=swap)
+         so text renders immediately in the system fallback and swaps in once loaded. -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
     />
-    <!-- Meta Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '2230969181053161');
-      fbq('track', 'PageView');
-    </script>
-    <!-- End Meta Pixel Code -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+      />
+    </noscript>
     <script src="/__heylloyd/ready.js" data-heylloyd-ready></script>
       <script src="/__heylloyd/picker.js" data-heylloyd-pick-ignore data-heylloyd-injected></script>
-    <script type="module" crossorigin src="/assets/index-X2EAqotP.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dr9kvYgj.css">
+    <script type="module" crossorigin src="/assets/index-BfUAj2Ah.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Dkqpyund.css">
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2230969181053161&ev=PageView&noscript=1" alt="" /></noscript>
     <div id="root"></div>
+
+    <!-- Meta Pixel Code — deferred until browser is idle so it does not block first paint or LCP.
+         The inner snippet still loads fbevents.js asynchronously (t.async=!0); this outer wrapper
+         simply delays the snippet itself from running during the critical render path. -->
+    <script>
+      (function () {
+        function loadPixel() {
+          !(function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+              n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = "2.0";
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
+          })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+          window.fbq("init", "2230969181053161");
+          window.fbq("track", "PageView");
+        }
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(loadPixel, { timeout: 2000 });
+        } else {
+          window.setTimeout(loadPixel, 1200);
+        }
+      })();
+    </script>
   </body>
 </html>
