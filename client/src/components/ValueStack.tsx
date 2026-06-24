@@ -47,13 +47,11 @@ export function ValueStack() {
   // re-trigger it again on subsequent clicks during the same session.
   const [upsellShown, setUpsellShown] = useState(false);
 
-  const basePrice = 27;
+  const basePrice = 14;
   const bumpPrice = 8.99;
-  const totalPrice =
-    basePrice +
-    (bumpCulinary ? bumpPrice : 0) +
-    (bumpPhrases ? bumpPrice : 0) +
-    (bumpAirport ? bumpPrice : 0);
+  const bumpCount =
+    (bumpCulinary ? 1 : 0) + (bumpPhrases ? 1 : 0) + (bumpAirport ? 1 : 0);
+  const totalPrice = basePrice + bumpCount * bumpPrice;
 
   const buildCheckoutUrl = () => {
     if (bumpCulinary && bumpPhrases && bumpAirport)
@@ -70,15 +68,16 @@ export function ValueStack() {
   };
 
   // Intercepts a checkout button click. If the user has NOT selected any
-  // order bump, we prevent navigation and open the exit-intent upsell popup
-  // instead. If any bump is checked, we let the click proceed normally and
-  // just fire the AddToCart pixel event.
+  // order bump AND the popup hasn't been shown yet this session, we prevent
+  // navigation and open the exit-intent upsell popup offering the full
+  // bundle at 30% off. If any bump is checked OR the popup already fired,
+  // we let the click proceed normally and just fire the AddToCart event.
   const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const noBumpsSelected = !bumpCulinary && !bumpPhrases && !bumpAirport;
     if (noBumpsSelected && !upsellShown) {
       e.preventDefault();
-      setUpsellShown(true);
       setUpsellOpen(true);
+      setUpsellShown(true);
       return;
     }
     handleAddToCart();
@@ -223,9 +222,9 @@ export function ValueStack() {
               <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
                 {bumpCulinary || bumpPhrases || bumpAirport ? "Your Total" : "Current Offer"}
               </p>
-              <div className="flex items-baseline justify-center gap-3 md:gap-4 mb-1">
+              <div className="flex items-baseline justify-center mb-1">
                 <span
-                  className="font-serif text-5xl md:text-6xl text-emerald-900 font-bold tracking-tight transition-all duration-300"
+                  className="font-serif text-5xl md:text-6xl text-emerald-900 font-bold tracking-tight transition-all duration-300 tabular-nums"
                   data-testid="text-price-current"
                   key={totalPrice}
                 >
@@ -250,24 +249,24 @@ export function ValueStack() {
                 >
                   <div className="flex justify-between text-charcoal/80">
                     <span>Italy Insider Protocol</span>
-                    <span className="tabular-nums">$27.00</span>
+                    <span className="tabular-nums whitespace-nowrap">$14.00</span>
                   </div>
                   {bumpCulinary && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-culinary">
                       <span>+ Culinary Intelligence Vault</span>
-                      <span className="tabular-nums">$8.99</span>
+                      <span className="tabular-nums whitespace-nowrap">$8.99</span>
                     </div>
                   )}
                   {bumpPhrases && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-phrases">
                       <span>+ The Golden 50 Phrases</span>
-                      <span className="tabular-nums">$8.99</span>
+                      <span className="tabular-nums whitespace-nowrap">$8.99</span>
                     </div>
                   )}
                   {bumpAirport && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-airport">
                       <span>+ Airport Survival Guide</span>
-                      <span className="tabular-nums">$8.99</span>
+                      <span className="tabular-nums whitespace-nowrap">$8.99</span>
                     </div>
                   )}
                   <div className="flex justify-between font-bold text-emerald-900 pt-1.5 mt-1.5 border-t border-gold/30">
