@@ -61,7 +61,7 @@ export function Hero() {
               <div className="relative mx-auto max-w-[400px] lg:max-w-none">
                 <div className="absolute inset-0 border border-gold/30 translate-x-4 translate-y-4 rounded-sm -z-10" />
                 <img
-                  src="/protocol-hero.png"
+                  src="/protocol-hero.jpg"
                   alt="The Italy Insider Protocol on a smartphone at an Italian cafe"
                   className="w-full h-auto rounded-sm shadow-2xl object-cover aspect-[4/5] object-center"
                   data-testid="img-hero-protocol"

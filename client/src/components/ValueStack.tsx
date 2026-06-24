@@ -342,7 +342,7 @@ export function ValueStack() {
                     data-testid="checkbox-bump-airport"
                   />
                   <img
-                    src="/airport-guide.png"
+                    src="/airport-guide.jpg"
                     alt="The Arrival Protocol — Airport Survival Guide"
                     className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
@@ -390,7 +390,7 @@ export function ValueStack() {
                     data-testid="checkbox-bump-phrases"
                   />
                   <img
-                    src="/golden-phrases.png"
+                    src="/golden-phrases.jpg"
                     alt="The 50 Golden Phrases Guide"
                     className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
@@ -440,7 +440,7 @@ export function ValueStack() {
                     data-testid="checkbox-bump-culinary"
                   />
                   <img
-                    src="/culinary-vault.png"
+                    src="/culinary-vault.jpg"
                     alt="The Culinary Intelligence Vault"
                     className="hidden sm:block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />

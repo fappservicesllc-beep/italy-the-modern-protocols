@@ -65,14 +65,14 @@ const FALLBACK_PRODUCTS: ScannedProduct[] = [
     editionLabel: "Physical Book",
     priceNumber: 27,
     priceText: "$27",
-    thumbnailUrl: "/protocol-hero.png",
+    thumbnailUrl: "/protocol-hero.jpg",
   },
   {
     title: "The Italy Insider Protocol",
     editionLabel: "Digital Edition",
     priceNumber: 17,
     priceText: "$17",
-    thumbnailUrl: "/protocol-hero.png",
+    thumbnailUrl: "/protocol-hero.jpg",
   },
 ];
 
@@ -167,7 +167,7 @@ function scanDomProducts(): ScannedProduct[] {
 
     // Thumbnail: first image in container
     const img = container.querySelector<HTMLImageElement>("img");
-    const thumbnailUrl = img?.src || "/protocol-hero.png";
+    const thumbnailUrl = img?.src || "/protocol-hero.jpg";
 
     const key = `${title}::${parsed.number}`;
     if (seen.has(key)) return;
