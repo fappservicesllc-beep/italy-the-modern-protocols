@@ -23,10 +23,10 @@ export function Proof() {
     >
       <div className="max-w-4xl mx-auto px-6 text-center">
         <FadeIn>
-          <span className="text-gold font-sans text-xs font-bold tracking-[0.2em] uppercase mb-6 block">
+          <span className="text-gold font-sans text-sm md:text-xs font-bold tracking-[0.2em] uppercase mb-6 block">
             Proof / Believability
           </span>
-          <h2 className="text-3xl md:text-4xl font-serif text-gold mb-12">
+          <h2 className="text-4xl md:text-4xl font-serif text-gold mb-12">
             What changes in 7 days:
           </h2>
         </FadeIn>
@@ -42,10 +42,10 @@ export function Proof() {
                 }`}
                 data-testid={`milestone-${i}`}
               >
-                <span className="font-serif text-xl text-gold min-w-[100px]">
+                <span className="font-serif text-2xl md:text-xl text-gold min-w-[100px]">
                   {m.when}
                 </span>
-                <p className="text-lg font-sans font-light text-ivory/90">
+                <p className="text-lg md:text-lg font-sans font-light text-ivory/90">
                   {m.what}
                 </p>
               </div>

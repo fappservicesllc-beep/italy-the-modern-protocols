@@ -164,7 +164,7 @@ export function ValueStack() {
 
               <ul className="space-y-3 md:space-y-4 max-w-xl mx-auto">
                 <li
-                  className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug"
+                  className="flex gap-3 text-base md:text-base text-charcoal/85 font-sans leading-snug"
                   data-testid="bonus-item-1"
                 >
                   <span
@@ -184,7 +184,7 @@ export function ValueStack() {
                   </span>
                 </li>
                 <li
-                  className="flex gap-3 text-sm md:text-base text-charcoal/85 font-sans leading-snug"
+                  className="flex gap-3 text-base md:text-base text-charcoal/85 font-sans leading-snug"
                   data-testid="bonus-item-2"
                 >
                   <span
@@ -356,14 +356,14 @@ export function ValueStack() {
                     >
                       ★ Highly Recommended
                     </span>
-                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       Most travelers lose &euro;60+ in their first hour at the
                       airport. This guide shows you exactly how to exit FCO,
                       MXP, and NAP &mdash; fixed-rate taxis, local SIM cards,
                       train cut-off times, and how to spot fake drivers before
                       they spot you.
                     </p>
-                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>
@@ -405,7 +405,7 @@ export function ValueStack() {
                       </span>
                       <span>Unlock Respect with the &ldquo;Golden 50&rdquo;</span>
                     </p>
-                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       English is fine, but the right Italian phrase at the
                       right time changes everything. I&rsquo;ve curated the 50
                       specific phrases that unlock better tables, rare wine
@@ -413,7 +413,7 @@ export function ValueStack() {
                       you meet. No grammar, no fluff&mdash;just the phonetics
                       of belonging. A must-have for your phone.
                     </p>
-                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>
@@ -454,7 +454,7 @@ export function ValueStack() {
                     >
                       ★ Highly Recommended
                     </span>
-                    <p className="text-xs md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       Most visitors fall into &ldquo;tourist traps&rdquo; with
                       frozen food and plastic menus. Add my{" "}
                       <em>Culinary Vault</em> to your order and get my private
@@ -462,7 +462,7 @@ export function ValueStack() {
                       fake gelato shop, and the regional food secrets only
                       locals know. Eat like a king for a fraction of the price.
                     </p>
-                    <p className="text-xs md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>

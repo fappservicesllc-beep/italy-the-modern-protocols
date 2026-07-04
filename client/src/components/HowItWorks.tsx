@@ -48,7 +48,7 @@ export function HowItWorks() {
               <h3 className="text-2xl font-serif text-emerald-900 mb-4">
                 {step.title}
               </h3>
-              <p className="text-charcoal/70 font-sans font-light leading-relaxed">
+              <p className="text-lg md:text-base text-charcoal/70 font-sans font-light leading-relaxed">
                 {step.desc}
               </p>
             </div>

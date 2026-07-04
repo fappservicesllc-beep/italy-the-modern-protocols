@@ -7,7 +7,7 @@ export function SocialProofBar() {
       <div className="max-w-4xl mx-auto">
         <div className="border-t border-emerald-900/15" />
         <p
-          className="text-center text-sm md:text-base italic font-serif py-4 md:py-5 px-2"
+          className="text-center text-base md:text-base italic font-serif py-4 md:py-5 px-2"
           style={{ color: "#1a3a2a" }}
           data-testid="text-social-proof"
         >

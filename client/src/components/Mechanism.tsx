@@ -14,7 +14,7 @@ export function Mechanism() {
 
       <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
         <FadeIn>
-          <span className="text-gold font-sans text-xs font-bold tracking-[0.2em] uppercase mb-6 block">
+          <span className="text-gold font-sans text-sm md:text-xs font-bold tracking-[0.2em] uppercase mb-6 block">
             The Unique Mechanism
           </span>
           <h2 className="text-4xl md:text-5xl font-serif text-gold mb-10">
@@ -23,14 +23,14 @@ export function Mechanism() {
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <p className="text-xl font-serif italic text-ivory/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-2xl md:text-xl font-serif italic text-ivory/90 mb-8 max-w-2xl mx-auto">
             This isn&rsquo;t just a language guide; it&rsquo;s a cultural DNA
             transplant.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <p className="text-lg text-ivory/80 font-sans font-light leading-relaxed max-w-3xl mx-auto">
+          <p className="text-lg md:text-lg text-ivory/80 font-sans font-light leading-relaxed max-w-3xl mx-auto">
             Built on the &ldquo;Respect-First&rdquo; linguistic framework, this
             protocol focuses on the{" "}
             <strong className="text-gold font-normal">

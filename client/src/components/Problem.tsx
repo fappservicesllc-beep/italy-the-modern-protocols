@@ -16,7 +16,7 @@ export function Problem() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16">
         <FadeIn delay={0.1} direction="up">
           <div className="p-8 bg-white shadow-sm border border-gold/10 rounded-sm h-full">
-            <p className="text-charcoal/80 font-sans font-light leading-relaxed">
+            <p className="text-lg md:text-base text-charcoal/80 font-sans font-light leading-relaxed">
               Most travelers land in Italy armed with &ldquo;polite&rdquo;
               snippets from a green owl app, only to find themselves invisible.
               You wait twenty minutes for a menu that never comes. You get hit
@@ -30,7 +30,7 @@ export function Problem() {
         <FadeIn delay={0.2} direction="up">
           <div className="p-8 bg-emerald-900 text-ivory shadow-sm rounded-sm h-full relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2" />
-            <p className="font-serif text-lg leading-relaxed relative z-10">
+            <p className="font-serif text-xl md:text-lg leading-relaxed relative z-10">
               The reality is that Italy doesn&rsquo;t run on grammar; it runs
               on relationships and &ldquo;Bella Figura.&rdquo; If you
               don&rsquo;t know how to carry yourself and acknowledge the social
