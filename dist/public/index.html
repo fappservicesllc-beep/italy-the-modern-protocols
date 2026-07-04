@@ -39,9 +39,44 @@
       />
     </noscript>
     <script src="/__heylloyd/ready.js" data-heylloyd-ready></script>
-      <script src="/__heylloyd/picker.js" data-heylloyd-pick-ignore data-heylloyd-injected></script>
-    <script type="module" crossorigin src="/assets/index-CGfjpK6_.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BhnzOnMN.css">
+    <script>
+      // Guard: remove any HeyLloyd dev-only injected scripts that leak into the production build.
+      // The picker/editor scripts are meant for the Studio sandbox only; in production they can
+      // interfere with mobile viewport rendering and layout. Strip them before they execute.
+      (function () {
+        try {
+          var selectors = [
+            'script[src*="/__heylloyd/picker"]',
+            'script[data-heylloyd-injected]',
+            'script[data-heylloyd-pick-ignore]'
+          ];
+          selectors.forEach(function (sel) {
+            document.querySelectorAll(sel).forEach(function (el) {
+              // Preserve the ready.js beacon; only remove picker/editor scripts.
+              if (el.hasAttribute('data-heylloyd-ready')) return;
+              el.parentNode && el.parentNode.removeChild(el);
+            });
+          });
+          // Also observe for late injections and strip them too.
+          if (window.MutationObserver) {
+            var obs = new MutationObserver(function (mutations) {
+              mutations.forEach(function (m) {
+                m.addedNodes && m.addedNodes.forEach(function (n) {
+                  if (n.nodeType !== 1) return;
+                  var src = n.getAttribute && n.getAttribute('src');
+                  if (n.tagName === 'SCRIPT' && src && src.indexOf('/__heylloyd/picker') !== -1) {
+                    n.parentNode && n.parentNode.removeChild(n);
+                  }
+                });
+              });
+            });
+            obs.observe(document.documentElement, { childList: true, subtree: true });
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-VI6a4imF.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DiTQzZah.css">
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2230969181053161&ev=PageView&noscript=1" alt="" /></noscript>
