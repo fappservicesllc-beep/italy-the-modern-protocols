@@ -18,7 +18,7 @@ export function Hero() {
             <FadeIn delay={0.1}>
               <div className="flex items-center gap-4 mb-6">
                 <div className="h-px w-12 bg-gold" />
-                <span className="text-gold font-sans text-sm md:text-xs font-bold tracking-[0.2em] uppercase">
+                <span className="text-gold font-sans text-base md:text-xs font-bold tracking-[0.2em] uppercase">
                   The Italy Insider Protocol
                 </span>
               </div>
@@ -26,7 +26,7 @@ export function Hero() {
 
             <FadeIn delay={0.2}>
               <h1
-                className="text-5xl md:text-5xl lg:text-6xl font-serif text-emerald-900 leading-[1.05] mb-6"
+                className="text-6xl md:text-5xl lg:text-6xl font-serif text-emerald-900 leading-[1.05] mb-6"
                 data-testid="text-hero-headline"
               >
                 Stop Being a &ldquo;Target&rdquo;: How to Navigate Italy with
@@ -36,7 +36,7 @@ export function Hero() {
 
             <FadeIn delay={0.3}>
               <p
-                className="text-xl md:text-xl text-charcoal/80 leading-relaxed font-sans font-light mb-8"
+                className="text-2xl md:text-xl text-charcoal/80 leading-relaxed font-sans font-light mb-8"
                 data-testid="text-hero-subheadline"
               >
                 The exact system 847 travelers used to eat, move and speak like

@@ -46,7 +46,7 @@ export function WhyFailed() {
                   <h3 className="text-xl font-serif text-emerald-900 mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-lg md:text-base text-charcoal/70 font-sans font-light leading-relaxed">
+                  <p className="text-xl md:text-base text-charcoal/70 font-sans font-light leading-relaxed">
                     {item.desc}
                   </p>
                 </div>

@@ -30,7 +30,7 @@ export function Mechanism() {
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <p className="text-lg md:text-lg text-ivory/80 font-sans font-light leading-relaxed max-w-3xl mx-auto">
+          <p className="text-2xl md:text-lg text-ivory/80 font-sans font-light leading-relaxed max-w-3xl mx-auto">
             Built on the &ldquo;Respect-First&rdquo; linguistic framework, this
             protocol focuses on the{" "}
             <strong className="text-gold font-normal">

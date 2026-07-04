@@ -21,7 +21,7 @@ export function SectionHeader({
         >
           {!centered && <div className="h-px w-8 bg-gold" />}
           <span
-            className="text-gold font-sans text-sm md:text-xs font-bold tracking-[0.2em] uppercase"
+            className="text-gold font-sans text-base md:text-xs font-bold tracking-[0.2em] uppercase"
             data-testid={`eyebrow-${eyebrow.toLowerCase().replace(/\s+/g, "-")}`}
           >
             {eyebrow}
@@ -32,7 +32,7 @@ export function SectionHeader({
 
       {title && (
         <FadeIn delay={0.2}>
-          <h2 className="text-4xl md:text-4xl lg:text-5xl font-serif text-emerald-900 leading-tight">
+          <h2 className="text-5xl md:text-4xl lg:text-5xl font-serif text-emerald-900 leading-tight">
             {title}
           </h2>
         </FadeIn>

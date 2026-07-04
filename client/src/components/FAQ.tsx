@@ -49,7 +49,7 @@ export function FAQ() {
                   data-testid={`button-faq-${index}`}
                   aria-expanded={isOpen}
                 >
-                  <span className="font-serif text-xl md:text-lg text-emerald-900">
+                  <span className="font-serif text-2xl md:text-lg text-emerald-900">
                     {faq.q}
                   </span>
                   <span className="text-gold flex-shrink-0 ml-4">
@@ -69,7 +69,7 @@ export function FAQ() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
                       <div
-                        className="px-6 pb-6 pt-0 text-lg md:text-base text-charcoal/70 font-sans font-light leading-relaxed"
+                        className="px-6 pb-6 pt-0 text-xl md:text-base text-charcoal/70 font-sans font-light leading-relaxed"
                         data-testid={`text-faq-answer-${index}`}
                       >
                         {faq.a}

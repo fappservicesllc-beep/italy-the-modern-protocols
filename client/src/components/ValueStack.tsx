@@ -271,7 +271,7 @@ export function ValueStack() {
                   )}
                   <div className="flex justify-between font-bold text-emerald-900 pt-1.5 mt-1.5 border-t border-gold/30">
                     <span className="uppercase tracking-wider text-[11px] md:text-xs">Total</span>
-                    <span className="tabular-nums text-sm md:text-base" data-testid="summary-total">
+                    <span className="tabular-nums text-base md:text-base" data-testid="summary-total">
                       ${totalPrice.toFixed(2)}
                     </span>
                   </div>
@@ -346,7 +346,7 @@ export function ValueStack() {
                     className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
-                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
+                    <p className="font-serif font-bold text-emerald-900 text-base md:text-base leading-tight">
                       🛬 Don&rsquo;t land blind &mdash; Know before you go{" "}
                       <span className="text-gold">(Save 60%)</span>
                     </p>
@@ -356,14 +356,14 @@ export function ValueStack() {
                     >
                       ★ Highly Recommended
                     </span>
-                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-base md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       Most travelers lose &euro;60+ in their first hour at the
                       airport. This guide shows you exactly how to exit FCO,
                       MXP, and NAP &mdash; fixed-rate taxis, local SIM cards,
                       train cut-off times, and how to spot fake drivers before
                       they spot you.
                     </p>
-                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-base md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>
@@ -394,7 +394,7 @@ export function ValueStack() {
                     className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
-                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight flex items-center gap-2">
+                    <p className="font-serif font-bold text-emerald-900 text-base md:text-base leading-tight flex items-center gap-2">
                       <span
                         aria-label="Italian flag"
                         className="inline-flex h-3.5 w-5 md:h-4 md:w-6 overflow-hidden rounded-[2px] border border-charcoal/20 flex-shrink-0"
@@ -405,7 +405,7 @@ export function ValueStack() {
                       </span>
                       <span>Unlock Respect with the &ldquo;Golden 50&rdquo;</span>
                     </p>
-                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-base md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       English is fine, but the right Italian phrase at the
                       right time changes everything. I&rsquo;ve curated the 50
                       specific phrases that unlock better tables, rare wine
@@ -413,7 +413,7 @@ export function ValueStack() {
                       you meet. No grammar, no fluff&mdash;just the phonetics
                       of belonging. A must-have for your phone.
                     </p>
-                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-base md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>
@@ -444,7 +444,7 @@ export function ValueStack() {
                     className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0"
                   />
                   <div className="flex-1 text-left">
-                    <p className="font-serif font-bold text-emerald-900 text-sm md:text-base leading-tight">
+                    <p className="font-serif font-bold text-emerald-900 text-base md:text-base leading-tight">
                       🍝 WAIT! Don&rsquo;t eat like a tourist...{" "}
                       <span className="text-gold">(Save 60%)</span>
                     </p>
@@ -454,7 +454,7 @@ export function ValueStack() {
                     >
                       ★ Highly Recommended
                     </span>
-                    <p className="text-sm md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
+                    <p className="text-base md:text-sm text-charcoal/80 font-sans mt-1.5 leading-snug">
                       Most visitors fall into &ldquo;tourist traps&rdquo; with
                       frozen food and plastic menus. Add my{" "}
                       <em>Culinary Vault</em> to your order and get my private
@@ -462,7 +462,7 @@ export function ValueStack() {
                       fake gelato shop, and the regional food secrets only
                       locals know. Eat like a king for a fraction of the price.
                     </p>
-                    <p className="text-sm md:text-sm font-sans font-bold text-emerald-900 mt-2">
+                    <p className="text-base md:text-sm font-sans font-bold text-emerald-900 mt-2">
                       ✓ Add to my order for only{" "}
                       <span className="text-base md:text-lg">$8.99</span>
                     </p>

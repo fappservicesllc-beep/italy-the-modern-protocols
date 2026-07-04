@@ -20,8 +20,8 @@ export function Button({
   const baseClasses = `
     inline-flex items-center justify-center
     bg-emerald-900 text-ivory hover:bg-emerald-900/90
-    px-8 py-5 md:py-4 rounded-sm
-    font-serif text-xl md:text-lg tracking-wide
+    px-8 py-6 md:py-4 rounded-sm
+    font-serif text-2xl md:text-lg tracking-wide
     transition-all duration-300 ease-in-out
     shadow-lg hover:shadow-xl hover:-translate-y-0.5
     border border-emerald-900/20

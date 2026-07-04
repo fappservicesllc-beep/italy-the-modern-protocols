@@ -45,7 +45,7 @@ export function Proof() {
                 <span className="font-serif text-2xl md:text-xl text-gold min-w-[100px]">
                   {m.when}
                 </span>
-                <p className="text-lg md:text-lg font-sans font-light text-ivory/90">
+                <p className="text-2xl md:text-lg font-sans font-light text-ivory/90">
                   {m.what}
                 </p>
               </div>

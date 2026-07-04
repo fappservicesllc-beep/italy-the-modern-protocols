@@ -37,7 +37,7 @@ export function WhoFor() {
                         strokeWidth={2}
                       />
                     </div>
-                    <p className="text-lg md:text-base text-charcoal/80 font-sans font-light leading-relaxed">
+                    <p className="text-xl md:text-base text-charcoal/80 font-sans font-light leading-relaxed">
                       {text}
                     </p>
                   </div>
@@ -64,7 +64,7 @@ export function WhoFor() {
                         strokeWidth={2}
                       />
                     </div>
-                    <p className="text-lg md:text-base text-charcoal/70 font-sans font-light leading-relaxed">
+                    <p className="text-xl md:text-base text-charcoal/70 font-sans font-light leading-relaxed">
                       {text}
                     </p>
                   </div>

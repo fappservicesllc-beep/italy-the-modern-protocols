@@ -58,7 +58,7 @@ export function Testimonials() {
                 </div>
 
                 <blockquote
-                  className="font-serif italic text-xl md:text-lg leading-relaxed text-charcoal/85 flex-1"
+                  className="font-serif italic text-2xl md:text-lg leading-relaxed text-charcoal/85 flex-1"
                   data-testid={`quote-testimonial-${i}`}
                 >
                   “{t.quote}”
