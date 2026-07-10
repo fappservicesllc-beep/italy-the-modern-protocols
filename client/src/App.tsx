@@ -1,3 +1,4 @@
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Hero } from "@/components/Hero";
 import { SocialProofBar } from "@/components/SocialProofBar";
 import { OpeningHook } from "@/components/OpeningHook";
@@ -17,6 +18,7 @@ import { RecentPurchaseToast } from "@/components/RecentPurchaseToast";
 export default function App() {
   return (
     <div className="min-h-screen bg-ivory selection:bg-gold/30 selection:text-emerald-900">
+      <AnnouncementBar />
       <main>
         <Hero />
         <SocialProofBar />

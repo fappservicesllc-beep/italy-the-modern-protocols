@@ -291,6 +291,13 @@ export function ValueStack() {
               )}
 
               <div className="text-center">
+                <p
+                  className="max-w-md mx-auto mb-4 font-sans font-bold text-sm md:text-base text-[#6b1220] leading-snug"
+                  data-testid="text-price-increase-notice"
+                >
+                  Last chance to get the Italy Insider Protocol for only $14.
+                  Price officially increases to $27 this Monday.
+                </p>
                 <Button
                   href={buildCheckoutUrl()}
                   onClick={handleCheckoutClick}

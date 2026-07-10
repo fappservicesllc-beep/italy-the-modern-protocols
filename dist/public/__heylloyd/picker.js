@@ -346,6 +346,26 @@
     // sent by the parent when the chat-input pill goes empty (× or
     // message-send). No-op when nothing is selected.
     else if (data.type === 'heylloyd:pick:clear-selection') clearSelection();
+    // Fast in-app navigation — parent's URL-bar/routes-dropdown asks us to
+    // switch pages using the app's own SPA router instead of a full iframe
+    // reload. history.pushState here resolves to the OUTERMOST patch (the
+    // router's wrapper sits on top of our nav-emitter wrapper because this
+    // script loads first), so SPA routers that hook pushState re-render
+    // immediately; the popstate dispatch below covers routers that only
+    // listen for popstate. Our own nav-emitter also fires from the same
+    // pushState call, so the parent URL bar syncs through the existing
+    // heylloyd:nav echo path — no new sync machinery. We ack with
+    // heylloyd:nav:go:done so the parent can cancel its full-reload
+    // fallback timer; if anything throws, no ack is sent and the parent
+    // falls back to the pre-existing full-reload navigation.
+    else if (data.type === 'heylloyd:nav:go' && typeof data.path === 'string') {
+      try {
+        var navPath = data.path.charAt(0) === '/' ? data.path : '/' + data.path;
+        history.pushState(null, '', navPath);
+        try { window.dispatchEvent(new PopStateEvent('popstate')); } catch (_) {}
+        try { window.parent.postMessage({ type: 'heylloyd:nav:go:done', path: navPath }, '*'); } catch (_) {}
+      } catch (_) {}
+    }
   });
 
   try { window.parent.postMessage({ type: 'heylloyd:picker:ready' }, '*'); } catch (_) {}
