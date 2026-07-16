@@ -63,15 +63,15 @@ const FALLBACK_PRODUCTS: ScannedProduct[] = [
   {
     title: "The Italy Insider Protocol",
     editionLabel: "Physical Book",
-    priceNumber: 14,
-    priceText: "$14.00",
+    priceNumber: 27,
+    priceText: "$27.00",
     thumbnailUrl: "/protocol-hero.jpg",
   },
   {
     title: "The Italy Insider Protocol",
     editionLabel: "Digital Edition",
-    priceNumber: 14,
-    priceText: "$14.00",
+    priceNumber: 27,
+    priceText: "$27.00",
     thumbnailUrl: "/protocol-hero.jpg",
   },
 ];

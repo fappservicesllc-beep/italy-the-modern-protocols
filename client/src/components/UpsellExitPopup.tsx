@@ -15,7 +15,7 @@ interface UpsellExitPopupProps {
 
 // Pricing constants — kept here so the popup is self-contained and
 // renders the same numbers shown on the page.
-const MAIN_PRICE = 14.0;
+const MAIN_PRICE = 27.0;
 const BUMP_PRICE = 8.99;
 const BUMP_COUNT = 3;
 const DISCOUNT_RATE = 0.3;
@@ -26,10 +26,10 @@ const DISCOUNT_RATE = 0.3;
 // source of truth shown in the "Today, with 30% off" row.
 const BUMP_DISCOUNTED = Math.round(BUMP_PRICE * (1 - DISCOUNT_RATE) * 100) / 100; // 6.29
 const BUMPS_TOTAL = BUMP_PRICE * BUMP_COUNT; // 26.97
-const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 40.97
-// Bundle total matches the Shopify permalink (47912373911778): $28.67.
-const BUNDLE_DISCOUNTED = 28.67;
-const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 12.30
+const BUNDLE_FULL = MAIN_PRICE + BUMPS_TOTAL; // 53.97
+// Bundle total matches the Shopify permalink (47912373911778): $37.78.
+const BUNDLE_DISCOUNTED = 37.78;
+const SAVINGS = BUNDLE_FULL - BUNDLE_DISCOUNTED; // 16.19
 
 const fmt = (n: number) => `$${n.toFixed(2)}`;
 

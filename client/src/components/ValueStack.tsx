@@ -47,7 +47,7 @@ export function ValueStack() {
   // re-trigger it again on subsequent clicks during the same session.
   const [upsellShown, setUpsellShown] = useState(false);
 
-  const basePrice = 14;
+  const basePrice = 27;
   const bumpPrice = 8.99;
   const bumpCount =
     (bumpCulinary ? 1 : 0) + (bumpPhrases ? 1 : 0) + (bumpAirport ? 1 : 0);
@@ -91,7 +91,7 @@ export function ValueStack() {
         content_name: "Italy Insider Protocol — Full Bundle (Upsell)",
         content_ids: [BUNDLE_BOTH_VARIANT_ID],
         content_type: "product",
-        value: 23.54,
+        value: 37.78,
         currency: "USD",
       });
     }
@@ -249,7 +249,7 @@ export function ValueStack() {
                 >
                   <div className="flex justify-between text-charcoal/80">
                     <span>Italy Insider Protocol</span>
-                    <span className="tabular-nums whitespace-nowrap">$14.00</span>
+                    <span className="tabular-nums whitespace-nowrap">${basePrice.toFixed(2)}</span>
                   </div>
                   {bumpCulinary && (
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-culinary">
@@ -295,8 +295,8 @@ export function ValueStack() {
                   className="max-w-md mx-auto mb-4 font-sans font-bold text-sm md:text-base text-[#6b1220] leading-snug"
                   data-testid="text-price-increase-notice"
                 >
-                  Last chance to get the Italy Insider Protocol for only $14.
-                  Price officially increases to $27 this Monday.
+                  Secure the Italy Insider Protocol today. Instant access —
+                  delivered to your inbox the moment you check out.
                 </p>
                 <Button
                   href={buildCheckoutUrl()}
