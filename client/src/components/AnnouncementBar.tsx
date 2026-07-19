@@ -111,7 +111,7 @@ export function AnnouncementBar() {
               data-testid="text-announcement-subtext"
             >
               Italy Insider Protocol —{" "}
-              <span className="text-[#d4af37] font-semibold">just $14</span>{" "}
+              <span className="text-[#d4af37] font-semibold">just $17</span>{" "}
               <span className="line-through text-white/40">$27</span>
             </p>
           </div>

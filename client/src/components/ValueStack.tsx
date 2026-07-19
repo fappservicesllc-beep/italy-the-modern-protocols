@@ -48,7 +48,7 @@ export function ValueStack() {
   const [upsellShown, setUpsellShown] = useState(false);
   const upsellShownRef = useRef(false);
 
-  const basePrice = 27;
+  const basePrice = 17;
   const bumpPrice = 8.99;
   const bumpCount =
     (bumpCulinary ? 1 : 0) + (bumpPhrases ? 1 : 0) + (bumpAirport ? 1 : 0);
@@ -145,7 +145,7 @@ export function ValueStack() {
         content_name: "Italy Insider Protocol — Full Bundle (Upsell)",
         content_ids: [BUNDLE_BOTH_VARIANT_ID],
         content_type: "product",
-        value: 37.78,
+        value: 30.78,
         currency: "USD",
       });
     }
@@ -273,6 +273,17 @@ export function ValueStack() {
               className="px-6 sm:px-8 md:px-12 pt-4 md:pt-5 pb-6 md:pb-8"
               data-testid="value-stack-offer"
             >
+              <div className="flex justify-center mb-3 md:mb-4">
+                <span
+                  className="inline-flex items-center gap-2 font-serif italic text-sm md:text-base text-emerald-900 bg-gold/15 border border-gold/40 rounded-full px-4 md:px-5 py-1.5 tracking-wide shadow-sm"
+                  data-testid="badge-limited-offer"
+                >
+                  <span aria-hidden="true">✨</span>
+                  <span className="not-italic font-sans font-bold text-[10px] md:text-xs uppercase tracking-[0.22em]">
+                    Special Limited Time Offer
+                  </span>
+                </span>
+              </div>
               <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
                 Your Total
               </p>
@@ -286,7 +297,7 @@ export function ValueStack() {
                 </span>
               </div>
               <p className="text-center text-[10px] md:text-xs text-charcoal/60 font-sans uppercase tracking-[0.2em] mb-3 md:mb-4">
-                {bumpCulinary || bumpPhrases || bumpAirport ? "Bundle Total" : "One-Time Payment"}
+                One-Time Payment
               </p>
 
               <p
@@ -362,13 +373,21 @@ export function ValueStack() {
                   Unlock My Insider Access Now
                 </Button>
 
-                <p
-                  className="text-base md:text-lg font-semibold text-charcoal/80 font-sans text-center max-w-md mx-auto mb-3 mt-1 animate-pulse"
+                <div
+                  className="max-w-md mx-auto mb-3 mt-2 inline-flex items-center gap-2 bg-gold/15 border border-gold/40 rounded-full px-4 md:px-5 py-2 shadow-sm animate-pulse"
                   data-testid="text-bundle-suggestion"
                 >
-                  Psst... Check out our limited-time Insider Bundles below
-                  (Optional) ↓
-                </p>
+                  <span className="text-base md:text-lg font-bold text-emerald-900 font-sans leading-snug text-center">
+                    Psst... Check out our limited-time Insider Bundles below
+                    (Optional)
+                  </span>
+                  <span
+                    className="text-lg md:text-xl text-gold font-bold animate-bounce"
+                    aria-hidden="true"
+                  >
+                    ↓
+                  </span>
+                </div>
 
                 <p className="text-[11px] md:text-xs text-charcoal/60 font-sans tracking-wider">
                   Immediate digital delivery
