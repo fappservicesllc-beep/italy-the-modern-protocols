@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FadeIn } from "./ui/FadeIn";
 import { Button } from "./ui/Button";
 import { UpsellExitPopup } from "./UpsellExitPopup";
@@ -39,13 +39,14 @@ const CHECKOUT_URL_UPSELL_DECLINE =
   "https://www.themodernprotocols.com/cart/47838889804002:1";
 
 export function ValueStack() {
-  const [bumpCulinary, setBumpCulinary] = useState(true);
-  const [bumpPhrases, setBumpPhrases] = useState(true);
-  const [bumpAirport, setBumpAirport] = useState(true);
+  const [bumpCulinary, setBumpCulinary] = useState(false);
+  const [bumpPhrases, setBumpPhrases] = useState(false);
+  const [bumpAirport, setBumpAirport] = useState(false);
   const [upsellOpen, setUpsellOpen] = useState(false);
   // Once the user has been shown the popup and declined (or accepted), don't
   // re-trigger it again on subsequent clicks during the same session.
   const [upsellShown, setUpsellShown] = useState(false);
+  const upsellShownRef = useRef(false);
 
   const basePrice = 27;
   const bumpPrice = 8.99;
@@ -67,21 +68,74 @@ export function ValueStack() {
     return CHECKOUT_URL_MAIN_ONLY;
   };
 
-  // Intercepts a checkout button click. If the user has NOT selected any
-  // order bump AND the popup hasn't been shown yet this session, we prevent
-  // navigation and open the exit-intent upsell popup offering the full
-  // bundle at 30% off. If any bump is checked OR the popup already fired,
-  // we let the click proceed normally and just fire the AddToCart event.
-  const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const noBumpsSelected = !bumpCulinary && !bumpPhrases && !bumpAirport;
-    if (noBumpsSelected && !upsellShown) {
-      e.preventDefault();
-      setUpsellOpen(true);
-      setUpsellShown(true);
-      return;
-    }
+  // Main-page checkout is now a clean, direct path to the $27 base checkout
+  // (plus any bumps the user manually selected). No interception — the click
+  // fires the AddToCart pixel event and proceeds straight to Shopify. The
+  // 30%-off bundle upsell is handled exclusively as an exit-intent popup
+  // (see the useEffect below), never on the main flow.
+  const handleCheckoutClick = () => {
     handleAddToCart();
   };
+
+  // Exit-intent trigger: fire the 30%-off bundle popup ONCE per session when
+  // the user shows intent to leave — either the mouse leaves the viewport
+  // through the top edge (desktop) or the tab is being hidden/closed
+  // (mobile + tab switch). Never triggers on the main click flow.
+  useEffect(() => {
+    if (upsellShown) return;
+
+    const trigger = () => {
+      if (upsellShownRef.current) return;
+      upsellShownRef.current = true;
+      setUpsellShown(true);
+      setUpsellOpen(true);
+    };
+
+    const handleMouseOut = (e: MouseEvent) => {
+      // Only when the cursor actually leaves the top of the document.
+      if (e.clientY <= 0 && !e.relatedTarget) {
+        trigger();
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        trigger();
+      }
+    };
+
+    // Backup trigger: if the user stays on the page without any interaction
+    // for a stretch of time, treat it as soft exit-intent (they're stalling /
+    // considering leaving) and surface the offer. Any real interaction —
+    // mouse move, scroll, key, or touch — resets the idle timer, so it only
+    // fires when the user has genuinely gone quiet.
+    const IDLE_MS = 25000;
+    let idleTimer: number | undefined;
+
+    const resetIdle = () => {
+      if (upsellShownRef.current) return;
+      if (idleTimer) window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(trigger, IDLE_MS);
+    };
+
+    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("mousemove", resetIdle, { passive: true });
+    window.addEventListener("scroll", resetIdle, { passive: true });
+    window.addEventListener("keydown", resetIdle);
+    window.addEventListener("touchstart", resetIdle, { passive: true });
+    resetIdle(); // start the idle countdown on mount
+
+    return () => {
+      document.removeEventListener("mouseout", handleMouseOut);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("mousemove", resetIdle);
+      window.removeEventListener("scroll", resetIdle);
+      window.removeEventListener("keydown", resetIdle);
+      window.removeEventListener("touchstart", resetIdle);
+      if (idleTimer) window.clearTimeout(idleTimer);
+    };
+  }, [upsellShown]);
 
   // Fires the upsell's "Yes, add both" CTA — track an AddToCart for the full
   // bundle before the popup's anchor takes the user to the bundle permalink.
@@ -220,7 +274,7 @@ export function ValueStack() {
               data-testid="value-stack-offer"
             >
               <p className="text-center text-[10px] md:text-xs text-charcoal/70 font-sans uppercase tracking-[0.25em] mb-1">
-                {bumpCulinary || bumpPhrases || bumpAirport ? "Your Total" : "Current Offer"}
+                Your Total
               </p>
               <div className="flex items-baseline justify-center mb-1">
                 <span
@@ -307,6 +361,14 @@ export function ValueStack() {
                 >
                   Unlock My Insider Access Now
                 </Button>
+
+                <p
+                  className="text-base md:text-lg font-semibold text-charcoal/80 font-sans text-center max-w-md mx-auto mb-3 mt-1 animate-pulse"
+                  data-testid="text-bundle-suggestion"
+                >
+                  Psst... Check out our limited-time Insider Bundles below
+                  (Optional) ↓
+                </p>
 
                 <p className="text-[11px] md:text-xs text-charcoal/60 font-sans tracking-wider">
                   Immediate digital delivery
