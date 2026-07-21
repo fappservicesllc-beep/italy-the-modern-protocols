@@ -140,51 +140,72 @@ export function ValueStack() {
   // Fires the upsell's "Yes, add both" CTA — track an AddToCart for the full
   // bundle before the popup's anchor takes the user to the bundle permalink.
   const handleUpsellAccept = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "AddToCart", {
-        content_name: "Italy Insider Protocol — Full Bundle (Upsell)",
-        content_ids: [BUNDLE_BOTH_VARIANT_ID],
-        content_type: "product",
-        value: 30.78,
-        currency: "USD",
-      });
-    }
+    if (typeof window === "undefined") return;
+    window.setTimeout(() => {
+      try {
+        window.fbq?.("track", "AddToCart", {
+          content_name: "Italy Insider Protocol — Full Bundle (Upsell)",
+          content_ids: [BUNDLE_BOTH_VARIANT_ID],
+          content_type: "product",
+          value: 30.78,
+          currency: "USD",
+        });
+      } catch {
+        /* pixel failure must never block checkout */
+      }
+    }, 0);
   };
 
   // Fires when the user declines the upsell — track an AddToCart for the
   // main product only before navigating to the main-only checkout.
   const handleUpsellDecline = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "AddToCart", {
-        content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
-        content_ids: [MAIN_VARIANT_ID],
-        content_type: "product",
-        value: basePrice,
-        currency: "USD",
-      });
-    }
+    if (typeof window === "undefined") return;
+    window.setTimeout(() => {
+      try {
+        window.fbq?.("track", "AddToCart", {
+          content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
+          content_ids: [MAIN_VARIANT_ID],
+          content_type: "product",
+          value: basePrice,
+          currency: "USD",
+        });
+      } catch {
+        /* pixel failure must never block checkout */
+      }
+    }, 0);
   };
 
   const handleAddToCart = () => {
-    if (typeof window !== "undefined" && window.fbq) {
-      const contentIds: string[] = [];
-      if (bumpCulinary && bumpPhrases) {
-        contentIds.push(BUNDLE_BOTH_VARIANT_ID);
-      } else if (bumpCulinary) {
-        contentIds.push(CULINARY_VAULT_VARIANT_ID);
-      } else if (bumpPhrases) {
-        contentIds.push(GOLDEN_PHRASES_VARIANT_ID);
-      } else {
-        contentIds.push(MAIN_VARIANT_ID);
+    // Fire-and-forget: defer the pixel to a macrotask so it NEVER blocks the
+    // <a> navigation to Shopify. On mobile fbq can do synchronous work (and
+    // kick off a network request) that briefly freezes the tap→checkout jump;
+    // pushing it to setTimeout(…, 0) lets the browser start navigating first.
+    // Wrapped in try/catch so a pixel error can never break the checkout link.
+    if (typeof window === "undefined") return;
+    window.setTimeout(() => {
+      try {
+        if (!window.fbq) return;
+        const contentIds: string[] = [];
+        if (bumpCulinary && bumpPhrases) {
+          contentIds.push(BUNDLE_BOTH_VARIANT_ID);
+        } else if (bumpCulinary) {
+          contentIds.push(CULINARY_VAULT_VARIANT_ID);
+        } else if (bumpPhrases) {
+          contentIds.push(GOLDEN_PHRASES_VARIANT_ID);
+        } else {
+          contentIds.push(MAIN_VARIANT_ID);
+        }
+        window.fbq("track", "AddToCart", {
+          content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
+          content_ids: contentIds,
+          content_type: "product",
+          value: totalPrice,
+          currency: "USD",
+        });
+      } catch {
+        /* pixel failure must never block checkout */
       }
-      window.fbq("track", "AddToCart", {
-        content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
-        content_ids: contentIds,
-        content_type: "product",
-        value: totalPrice,
-        currency: "USD",
-      });
-    }
+    }, 0);
   };
 
   return (
