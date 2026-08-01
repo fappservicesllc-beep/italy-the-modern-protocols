@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FadeIn } from "./ui/FadeIn";
 import { Button } from "./ui/Button";
 import { UpsellExitPopup } from "./UpsellExitPopup";
+import { LeadCaptureInline } from "./LeadCaptureInline";
 
 // Shopify variant IDs (used for Meta Pixel content_ids only — checkout
 // permalinks below are pre-built bundle URLs provided by the merchant).
@@ -68,11 +69,11 @@ export function ValueStack() {
     return CHECKOUT_URL_MAIN_ONLY;
   };
 
-  // Main-page checkout is now a clean, direct path to the $27 base checkout
-  // (plus any bumps the user manually selected). No interception — the click
-  // fires the AddToCart pixel event and proceeds straight to Shopify. The
-  // 30%-off bundle upsell is handled exclusively as an exit-intent popup
-  // (see the useEffect below), never on the main flow.
+  // Main-page checkout navigates STRAIGHT to the correct Shopify permalink via
+  // the anchor's native href — no interception, no modal, nothing that could
+  // delay the tap on mobile. The AddToCart pixel fires deferred (setTimeout 0)
+  // inside handleAddToCart so it never blocks the navigation. The 30%-off
+  // bundle upsell remains exclusively an exit-intent popup (see useEffect).
   const handleCheckoutClick = () => {
     handleAddToCart();
   };
@@ -280,6 +281,10 @@ export function ValueStack() {
                   </span>
                 </li>
               </ul>
+
+              {/* Inline lead capture — sits directly under the Bonus #2 copy so
+                  it reads as part of the stack, not as an interruption. */}
+              <LeadCaptureInline />
             </div>
 
             {/* ============ DIVIDER ============ */}

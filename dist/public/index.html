@@ -76,11 +76,22 @@
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-Dsasvsor.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-GJzmwXkL.css">
+    <script type="module" crossorigin src="/assets/index-CUqwQoIb.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-SQ5HO2Le.css">
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2230969181053161&ev=PageView&noscript=1" alt="" /></noscript>
+
+    <!-- Hidden static form so Netlify's build-time bot detects and registers
+         the "packing-masterlist" form. The inline capture section below the Hero
+         posts to this same form-name as a mirror of the email relay.
+         Netlify only scans the raw HTML (it does not run React), so this ghost
+         form MUST list every field the React form submits. -->
+    <form name="packing-masterlist" netlify netlify-honeypot="bot-field" hidden>
+      <input type="email" name="email" />
+      <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
 
     <!-- Meta Pixel Code — deferred until browser is idle so it does not block first paint or LCP.
