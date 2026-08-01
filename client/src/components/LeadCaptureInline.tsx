@@ -22,8 +22,24 @@ const NETLIFY_FORM_NAME = "packing-masterlist";
 // auto-deliver the Masterlist by email. A webhook URL is safe to ship in
 // client-side code — unlike a GHL API token, it grants no account access, it
 // only accepts inbound payloads.
-const GHL_WEBHOOK_URL =
+export const GHL_WEBHOOK_URL =
   "https://services.leadconnectorhq.com/hooks/6jUCcpr6kuNkR0rlbxtr/webhook-trigger/j1BZ02HVHO9FQY1pMzwY";
+
+// Why GET-with-query-params is the PRIMARY shape rather than POST+JSON:
+// measured against the live endpoint, a GET carrying query params answers with
+// a `traceId` in the body, while a POST with a JSON body answers without one.
+// That traceId is GHL recording the hit in its request trace — which is what
+// populates the trigger's "Recent Requests" / "Test Trigger" picker used to
+// pick a Mapping Reference. A GET is also a CORS-"simple" request: no OPTIONS
+// preflight, no Content-Type header, so there is one less thing between the
+// browser and GHL. POST+JSON is kept as an automatic fallback below.
+const buildGhlUrl = (params: Record<string, string>) => {
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) qs.set(key, value);
+  }
+  return `${GHL_WEBHOOK_URL}?${qs.toString()}`;
+};
 
 /**
  * Inline lead-capture block. Lives INSIDE the offer card, directly beneath the
@@ -52,31 +68,48 @@ export function LeadCaptureInline() {
 
     // Channel 1 — GoHighLevel Inbound Webhook (primary CRM destination).
     // Fields are kept FLAT and use GHL's canonical contact names (email,
-    // first_name, name, tags) so the workflow's Create/Update Contact step can
-    // map them directly without custom-field gymnastics.
+    // first_name, tags) so the workflow's Create/Update Contact step can map
+    // them directly without custom-field gymnastics.
+    const ghlFields: Record<string, string> = {
+      email: address,
+      first_name: address.split("@")[0] ?? "",
+      tags: "italy-packing-masterlist",
+      source: "Italy Insider Protocol - Packing Masterlist form",
+      page: typeof window !== "undefined" ? window.location.href : "",
+      submitted_at: new Date().toISOString(),
+    };
+
     try {
-      void fetch(GHL_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: address,
-          tags: "italy-packing-masterlist",
-          source: "Italy Insider Protocol - Packing Masterlist form",
-          page: typeof window !== "undefined" ? window.location.href : "",
-          submitted_at: new Date().toISOString(),
-        }),
+      // Primary attempt: GET + query params. Simple CORS request (no preflight)
+      // and the shape that GHL answers with a traceId, i.e. the one it records
+      // in the trigger's Recent Requests list.
+      void fetch(buildGhlUrl(ghlFields), {
+        method: "GET",
         keepalive: true,
       })
         .then(async (res) => {
-          // Surfaced in the browser console so delivery can be verified from
-          // the live page. GHL answers 200 with a JSON status either way, so the
-          // body text is the only way to tell "workflow executed" from
-          // "sample/test payload captured but workflow not published".
           const text = await res.text().catch(() => "");
-          console.info("[GHL webhook]", res.status, text);
+          console.info("[GHL webhook GET]", res.status, text);
         })
         .catch((err) => {
-          console.warn("[GHL webhook] request failed:", err);
+          console.warn("[GHL webhook GET] failed:", err);
+        });
+
+      // Fallback attempt: POST + JSON body. Harmless duplicate — GHL dedupes on
+      // email when the workflow's Create/Update Contact step runs — and it
+      // guarantees delivery if the GET shape is ever rejected or rate-limited.
+      void fetch(GHL_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ghlFields),
+        keepalive: true,
+      })
+        .then(async (res) => {
+          const text = await res.text().catch(() => "");
+          console.info("[GHL webhook POST]", res.status, text);
+        })
+        .catch((err) => {
+          console.warn("[GHL webhook POST] failed:", err);
         });
     } catch {
       /* ignore */
