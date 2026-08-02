@@ -25,21 +25,16 @@ const NETLIFY_FORM_NAME = "packing-masterlist";
 export const GHL_WEBHOOK_URL =
   "https://services.leadconnectorhq.com/hooks/6jUCcpr6kuNkR0rlbxtr/webhook-trigger/j1BZ02HVHO9FQY1pMzwY";
 
-// Why GET-with-query-params is the PRIMARY shape rather than POST+JSON:
-// measured against the live endpoint, a GET carrying query params answers with
-// a `traceId` in the body, while a POST with a JSON body answers without one.
-// That traceId is GHL recording the hit in its request trace — which is what
-// populates the trigger's "Recent Requests" / "Test Trigger" picker used to
-// pick a Mapping Reference. A GET is also a CORS-"simple" request: no OPTIONS
-// preflight, no Content-Type header, so there is one less thing between the
-// browser and GHL. POST+JSON is kept as an automatic fallback below.
-const buildGhlUrl = (params: Record<string, string>) => {
-  const qs = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
-    if (value) qs.set(key, value);
-  }
-  return `${GHL_WEBHOOK_URL}?${qs.toString()}`;
-};
+// Why POST + JSON is the ONLY shape used, proven by GHL's own Enrollment
+// history: the trigger's Mapping Reference was captured from a JSON BODY
+// sample ({ "email": "test@example.com", "first_name": "Test" }), so GHL reads
+// the Email field from the request BODY. Requests sent as GET with query
+// params still enrolled — they show up in Enrollment history — but the mapped
+// Email path was empty, so GHL created contacts with NO email address (they
+// appear as raw contact IDs like "7dxrkHwvzKKB2odi..." instead of an email),
+// and the "Send Free PDF" step then had nobody to email. Hence: one POST, with
+// a body whose keys match the mapping sample exactly.
+const GHL_REQUEST_TIMEOUT_MS = 8000;
 
 /**
  * Inline lead-capture block. Lives INSIDE the offer card, directly beneath the
@@ -79,40 +74,28 @@ export function LeadCaptureInline() {
       submitted_at: new Date().toISOString(),
     };
 
-    // IMPORTANT — exactly ONE request must reach the webhook per lead.
-    // Measured against the live endpoint, a saved trigger answers BOTH a GET
-    // and a POST with `"request sent to trigger execution server"` plus a
-    // distinct execution `id`. That means each shape starts its OWN workflow
-    // run, so firing both would run the automation twice and email the reader
-    // the Masterlist twice. So: send the GET, and fall back to POST+JSON ONLY
-    // if the GET never reached GHL.
+    // EXACTLY ONE request per lead, sent as POST with a JSON body — the same
+    // shape as the mapping sample GHL saved. Sending a second request in any
+    // other shape would enroll the lead twice (GHL's Enrollment history proves
+    // duplicates happen: identical contacts one second apart) and email the
+    // reader the Masterlist twice.
     try {
-      void fetch(buildGhlUrl(ghlFields), {
-        method: "GET",
+      void fetch(GHL_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ghlFields),
         keepalive: true,
+        signal:
+          typeof AbortSignal !== "undefined" && "timeout" in AbortSignal
+            ? AbortSignal.timeout(GHL_REQUEST_TIMEOUT_MS)
+            : undefined,
       })
         .then(async (res) => {
           const text = await res.text().catch(() => "");
-          console.info("[GHL webhook GET]", res.status, text);
-          if (res.ok) return;
-          throw new Error(`GET returned ${res.status}`);
+          console.info("[GHL webhook POST]", res.status, text);
         })
         .catch((err) => {
-          console.warn("[GHL webhook GET] failed, retrying as POST:", err);
-          // Only now is a second request safe: the first one did not execute.
-          void fetch(GHL_WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ghlFields),
-            keepalive: true,
-          })
-            .then(async (res) => {
-              const text = await res.text().catch(() => "");
-              console.info("[GHL webhook POST fallback]", res.status, text);
-            })
-            .catch((e) => {
-              console.warn("[GHL webhook POST fallback] failed:", e);
-            });
+          console.warn("[GHL webhook POST] failed:", err);
         });
     } catch {
       /* ignore */
