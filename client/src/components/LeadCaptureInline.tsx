@@ -17,24 +17,27 @@ const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${DESTINATION_EMAIL}`;
 // still keeps the lead.
 const NETLIFY_FORM_NAME = "packing-masterlist";
 
-// GoHighLevel Inbound Webhook trigger. This is the primary destination: the
-// lead lands in the GHL workflow, which creates/updates the contact and can
-// auto-deliver the Masterlist by email. A webhook URL is safe to ship in
-// client-side code — unlike a GHL API token, it grants no account access, it
-// only accepts inbound payloads.
-export const GHL_WEBHOOK_URL =
-  "https://services.leadconnectorhq.com/hooks/6jUCcpr6kuNkR0rlbxtr/webhook-trigger/j1BZ02HVHO9FQY1pMzwY";
+// Same-origin lead endpoint. The browser NEVER calls GoHighLevel directly any
+// more, and that is the whole point.
+//
+// Symptom that proved it: a submission from an office computer delivered the
+// FormSubmit email but produced nothing in GHL — while hitting the GHL webhook
+// URL with curl always worked. That combination can only mean the request died
+// client-side, before it ever hit the network. Two very common causes:
+// corporate firewalls deny-list CRM/marketing hosts, and ad/tracker blockers
+// (uBlock Origin, Brave Shields, AdGuard, and the EasyPrivacy list they share)
+// block leadconnectorhq.com as a tracker. FormSubmit kept working because
+// nobody blocks formsubmit.co.
+//
+// Posting to our own domain instead removes the failure mode entirely: there is
+// no third-party hostname to match on and no CORS preflight. The server
+// (netlify/functions/lead.mjs in production, server/routes.ts in the preview)
+// forwards the lead to GHL from a network where no blocker exists — and it
+// sends a flat JSON body matching the trigger's saved Mapping Reference, so
+// Create/Update Contact reads the email correctly.
+const LEAD_ENDPOINT = "/api/lead";
 
-// Why POST + JSON is the ONLY shape used, proven by GHL's own Enrollment
-// history: the trigger's Mapping Reference was captured from a JSON BODY
-// sample ({ "email": "test@example.com", "first_name": "Test" }), so GHL reads
-// the Email field from the request BODY. Requests sent as GET with query
-// params still enrolled — they show up in Enrollment history — but the mapped
-// Email path was empty, so GHL created contacts with NO email address (they
-// appear as raw contact IDs like "7dxrkHwvzKKB2odi..." instead of an email),
-// and the "Send Free PDF" step then had nobody to email. Hence: one POST, with
-// a body whose keys match the mapping sample exactly.
-const GHL_REQUEST_TIMEOUT_MS = 8000;
+const LEAD_REQUEST_TIMEOUT_MS = 8000;
 
 /**
  * Inline lead-capture block. Lives INSIDE the offer card, directly beneath the
@@ -61,41 +64,33 @@ export function LeadCaptureInline() {
       /* localStorage unavailable (private mode) — ignore */
     }
 
-    // Channel 1 — GoHighLevel Inbound Webhook (primary CRM destination).
-    // Fields are kept FLAT and use GHL's canonical contact names (email,
-    // first_name, tags) so the workflow's Create/Update Contact step can map
-    // them directly without custom-field gymnastics.
-    const ghlFields: Record<string, string> = {
+    // Channel 1 — our own same-origin endpoint, which relays to GoHighLevel
+    // server-side. EXACTLY ONE request per lead, so the workflow enrolls once
+    // and the reader is emailed the Masterlist once.
+    const leadFields: Record<string, string> = {
       email: address,
       first_name: address.split("@")[0] ?? "",
-      tags: "italy-packing-masterlist",
       source: "Italy Insider Protocol - Packing Masterlist form",
       page: typeof window !== "undefined" ? window.location.href : "",
-      submitted_at: new Date().toISOString(),
     };
 
-    // EXACTLY ONE request per lead, sent as POST with a JSON body — the same
-    // shape as the mapping sample GHL saved. Sending a second request in any
-    // other shape would enroll the lead twice (GHL's Enrollment history proves
-    // duplicates happen: identical contacts one second apart) and email the
-    // reader the Masterlist twice.
     try {
-      void fetch(GHL_WEBHOOK_URL, {
+      void fetch(LEAD_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ghlFields),
+        body: JSON.stringify(leadFields),
         keepalive: true,
         signal:
           typeof AbortSignal !== "undefined" && "timeout" in AbortSignal
-            ? AbortSignal.timeout(GHL_REQUEST_TIMEOUT_MS)
+            ? AbortSignal.timeout(LEAD_REQUEST_TIMEOUT_MS)
             : undefined,
       })
         .then(async (res) => {
           const text = await res.text().catch(() => "");
-          console.info("[GHL webhook POST]", res.status, text);
+          console.info("[lead relay]", res.status, text);
         })
         .catch((err) => {
-          console.warn("[GHL webhook POST] failed:", err);
+          console.warn("[lead relay] failed:", err);
         });
     } catch {
       /* ignore */

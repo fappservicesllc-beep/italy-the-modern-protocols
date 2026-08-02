@@ -74,11 +74,81 @@ function serveStatic(app2) {
   });
 }
 
+// server/routes.ts
+var GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/6jUCcpr6kuNkR0rlbxtr/webhook-trigger/j1BZ02HVHO9FQY1pMzwY";
+var DESTINATION_EMAIL = "themodernprotocols@gmail.com";
+var FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${DESTINATION_EMAIL}`;
+var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function registerRoutes(app2) {
+  app2.post("/api/lead", async (req, res) => {
+    const body = req.body ?? {};
+    const email = String(body.email ?? "").trim();
+    if (!EMAIL_RE.test(email)) {
+      res.status(400).json({ ok: false, error: "A valid email is required" });
+      return;
+    }
+    const ghlFields = {
+      email,
+      first_name: String(body.first_name ?? email.split("@")[0] ?? ""),
+      tags: "italy-packing-masterlist",
+      source: String(body.source ?? "") || "Italy Insider Protocol - Packing Masterlist form",
+      page: String(body.page ?? ""),
+      submitted_at: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    let ghlStatus = 0;
+    let ghlBody = "";
+    let ghlError = "";
+    try {
+      const ghlRes = await fetch(GHL_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ghlFields)
+      });
+      ghlStatus = ghlRes.status;
+      ghlBody = await ghlRes.text().catch(() => "");
+      console.log("[lead] GHL responded", ghlStatus, ghlBody);
+    } catch (err) {
+      ghlError = String(err);
+      console.error("[lead] GHL request failed:", ghlError);
+    }
+    let emailRelayStatus = 0;
+    try {
+      const relay = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          _subject: "New lead \u2014 2026 Italy Packing Masterlist (server relay)",
+          source: ghlFields.source,
+          page: ghlFields.page,
+          _template: "table",
+          _captcha: "false"
+        })
+      });
+      emailRelayStatus = relay.status;
+    } catch (err) {
+      console.warn("[lead] inbox relay failed:", String(err));
+    }
+    const ghlAccepted = ghlStatus >= 200 && ghlStatus < 300;
+    res.status(ghlAccepted ? 200 : 502).json({
+      ok: ghlAccepted,
+      ghlStatus,
+      ghlBody: ghlBody.slice(0, 500),
+      ghlError,
+      emailRelayStatus
+    });
+  });
+}
+
 // server/index.ts
 var app = express2();
 app.use(express2.json());
 var server = http.createServer(app);
 (async () => {
+  registerRoutes(app);
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   } else {

@@ -1,3 +1,13 @@
 [build]
   command = "npm run build"
   publish = "dist/public"
+  functions = "netlify/functions"
+
+# Same-origin endpoint for the lead form. The browser posts here instead of to
+# leadconnectorhq.com, so corporate firewalls and tracker blockers have nothing
+# to match on; the function forwards to GoHighLevel server-side.
+[[redirects]]
+  from = "/api/lead"
+  to = "/.netlify/functions/lead"
+  status = 200
+  force = true

@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import { setupVite, serveStatic, log } from "./vite";
+import { registerRoutes } from "./routes";
 
 const app = express();
 app.use(express.json());
@@ -8,6 +9,8 @@ app.use(express.json());
 const server = http.createServer(app);
 
 (async () => {
+  registerRoutes(app);
+
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   } else {
