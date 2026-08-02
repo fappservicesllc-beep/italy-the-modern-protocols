@@ -37,6 +37,16 @@ const NETLIFY_FORM_NAME = "packing-masterlist";
 // Create/Update Contact reads the email correctly.
 const LEAD_ENDPOINT = "/api/lead";
 
+// GoHighLevel Inbound Webhook. Requested by GHL support as a FormSubmit
+// `_webhook` forward: FormSubmit re-posts every submission it receives to this
+// URL from ITS OWN servers. That server-to-server hop is immune to the office
+// firewall / tracker-blocker problem described above, because the browser never
+// contacts leadconnectorhq.com — FormSubmit does. It runs alongside (not
+// instead of) the /api/lead relay, so the lead reaches GHL by two independent
+// paths and a failure in either one is survivable.
+const GHL_WEBHOOK_URL =
+  "https://services.leadconnectorhq.com/hooks/6jUCcpr6kuNkR0rlbxtr/webhook-trigger/j1BZ02HVHO9FQY1pMzwY";
+
 const LEAD_REQUEST_TIMEOUT_MS = 8000;
 
 /**
@@ -106,10 +116,14 @@ export function LeadCaptureInline() {
         },
         body: JSON.stringify({
           email: address,
+          first_name: address.split("@")[0] ?? "",
           _subject: "New lead — 2026 Italy Packing Masterlist",
           source: "Inline form under Bonus #2 — italy.themodernprotocols.com",
           _template: "table",
           _captcha: "false",
+          // FormSubmit forwards this submission to GoHighLevel from its own
+          // servers — a second, blocker-proof path into the CRM.
+          _webhook: GHL_WEBHOOK_URL,
         }),
         // Survives the redirect to Shopify — the browser finishes the request
         // even after this page starts unloading.
@@ -210,6 +224,16 @@ export function LeadCaptureInline() {
             data-testid="form-lead-capture"
             noValidate
           >
+            {/* FormSubmit forwards every submission to GoHighLevel from its own
+                servers. Present in the rendered form HTML so a no-JS / native
+                POST submission still reaches the CRM. */}
+            <input
+              type="hidden"
+              name="_webhook"
+              value={GHL_WEBHOOK_URL}
+              data-testid="input-ghl-webhook"
+            />
+
             <label htmlFor="inline-lead-email" className="sr-only">
               Email Address
             </label>
