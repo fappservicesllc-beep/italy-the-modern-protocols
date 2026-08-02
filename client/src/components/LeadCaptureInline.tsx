@@ -79,10 +79,14 @@ export function LeadCaptureInline() {
       submitted_at: new Date().toISOString(),
     };
 
+    // IMPORTANT — exactly ONE request must reach the webhook per lead.
+    // Measured against the live endpoint, a saved trigger answers BOTH a GET
+    // and a POST with `"request sent to trigger execution server"` plus a
+    // distinct execution `id`. That means each shape starts its OWN workflow
+    // run, so firing both would run the automation twice and email the reader
+    // the Masterlist twice. So: send the GET, and fall back to POST+JSON ONLY
+    // if the GET never reached GHL.
     try {
-      // Primary attempt: GET + query params. Simple CORS request (no preflight)
-      // and the shape that GHL answers with a traceId, i.e. the one it records
-      // in the trigger's Recent Requests list.
       void fetch(buildGhlUrl(ghlFields), {
         method: "GET",
         keepalive: true,
@@ -90,26 +94,25 @@ export function LeadCaptureInline() {
         .then(async (res) => {
           const text = await res.text().catch(() => "");
           console.info("[GHL webhook GET]", res.status, text);
+          if (res.ok) return;
+          throw new Error(`GET returned ${res.status}`);
         })
         .catch((err) => {
-          console.warn("[GHL webhook GET] failed:", err);
-        });
-
-      // Fallback attempt: POST + JSON body. Harmless duplicate — GHL dedupes on
-      // email when the workflow's Create/Update Contact step runs — and it
-      // guarantees delivery if the GET shape is ever rejected or rate-limited.
-      void fetch(GHL_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ghlFields),
-        keepalive: true,
-      })
-        .then(async (res) => {
-          const text = await res.text().catch(() => "");
-          console.info("[GHL webhook POST]", res.status, text);
-        })
-        .catch((err) => {
-          console.warn("[GHL webhook POST] failed:", err);
+          console.warn("[GHL webhook GET] failed, retrying as POST:", err);
+          // Only now is a second request safe: the first one did not execute.
+          void fetch(GHL_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ghlFields),
+            keepalive: true,
+          })
+            .then(async (res) => {
+              const text = await res.text().catch(() => "");
+              console.info("[GHL webhook POST fallback]", res.status, text);
+            })
+            .catch((e) => {
+              console.warn("[GHL webhook POST fallback] failed:", e);
+            });
         });
     } catch {
       /* ignore */
