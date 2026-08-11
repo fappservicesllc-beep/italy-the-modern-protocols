@@ -1,41 +1,20 @@
-import { AnnouncementBar } from "@/components/AnnouncementBar";
-import { Hero } from "@/components/Hero";
-import { SocialProofBar } from "@/components/SocialProofBar";
-import { OpeningHook } from "@/components/OpeningHook";
-import { Problem } from "@/components/Problem";
-import { WhyFailed } from "@/components/WhyFailed";
-import { Mechanism } from "@/components/Mechanism";
-import { WhatYouGet } from "@/components/WhatYouGet";
-import { WhoFor } from "@/components/WhoFor";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Proof } from "@/components/Proof";
-import { Testimonials } from "@/components/Testimonials";
-import { FAQ } from "@/components/FAQ";
-import { ValueStack } from "@/components/ValueStack";
-import { Footer } from "@/components/Footer";
-import { RecentPurchaseToast } from "@/components/RecentPurchaseToast";
+import { Route, Switch } from "wouter";
+import Home from "@/pages/home";
+import PlanYourTrip from "@/pages/plan-your-trip";
+import { TripReviewBar } from "@/components/TripReviewBar";
 
 export default function App() {
   return (
     <div className="min-h-screen bg-ivory selection:bg-gold/30 selection:text-emerald-900">
-      <AnnouncementBar />
-      <main>
-        <Hero />
-        <SocialProofBar />
-        <OpeningHook />
-        <Problem />
-        <WhyFailed />
-        <Mechanism />
-        <WhatYouGet />
-        <WhoFor />
-        <HowItWorks />
-        <Proof />
-        <Testimonials />
-        <FAQ />
-        <ValueStack />
-      </main>
-      <Footer />
-      <RecentPurchaseToast />
+      {/* Static, site-wide announcement bar for the personalized-services page.
+          Sits above everything, including the existing launch countdown bar.
+          The existing funnel (Home) is unchanged — it simply moved into a route. */}
+      <TripReviewBar />
+
+      <Switch>
+        <Route path="/planyourtripwithus" component={PlanYourTrip} />
+        <Route component={Home} />
+      </Switch>
     </div>
   );
 }

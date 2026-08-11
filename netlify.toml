@@ -11,3 +11,11 @@
   to = "/.netlify/functions/lead"
   status = 200
   force = true
+
+# SPA fallback — MUST stay last so it never shadows the /api/lead function.
+# Without this, client-side routes like /planyourtripwithus return a hard 404
+# on Netlify because no such file exists in dist/public.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
