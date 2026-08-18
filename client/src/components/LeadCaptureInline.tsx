@@ -197,7 +197,7 @@ export function LeadCaptureInline() {
         Get my Free 2026 Italy Packing Masterlist
       </h3>
 
-      <p className="font-sans font-light text-sm md:text-base text-charcoal/70 text-center mt-2 leading-snug">
+      <p className="font-sans font-light text-[11px] md:text-xs text-charcoal/70 text-center mt-2 leading-relaxed tracking-[0.01em]">
         Enter your email to receive the list and continue to the Protocol.
       </p>
 
@@ -267,10 +267,6 @@ export function LeadCaptureInline() {
               {error}
             </p>
           )}
-
-          <p className="text-[10px] text-charcoal/50 font-sans text-center mt-3 uppercase tracking-[0.2em]">
-            No spam · Unsubscribe anytime
-          </p>
         </>
       )}
     </div>
