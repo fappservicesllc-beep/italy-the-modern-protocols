@@ -177,10 +177,10 @@ export function LeadCaptureInline() {
 
   return (
     <div
-      className="max-w-xl mx-auto mt-4 md:mt-5 bg-white/70 border border-gold/35 rounded-sm px-4 sm:px-5 py-4 md:py-5"
+      className="max-w-xl mx-auto mt-4 md:mt-5 bg-white/70 border border-gold/35 rounded-sm px-4 sm:px-5 py-2.5 md:py-3"
       data-testid="inline-lead-capture"
     >
-      <div className="text-center mb-3">
+      <div className="text-center mb-1.5">
         <div className="inline-flex items-center gap-2.5">
           <div className="h-px w-5 bg-gold" />
           <span className="text-gold font-sans text-[10px] font-bold tracking-[0.25em] uppercase">

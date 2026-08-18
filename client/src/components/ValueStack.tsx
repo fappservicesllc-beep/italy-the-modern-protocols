@@ -252,10 +252,10 @@ export function ValueStack() {
 
             {/* ============ TOP: DOUBLE BONUS ============ */}
             <div
-              className="px-6 sm:px-8 md:px-12 pt-6 md:pt-8 pb-4 md:pb-5"
+              className="px-6 sm:px-8 md:px-12 pt-4 md:pt-8 pb-2.5 md:pb-5"
               data-testid="value-stack-bonus"
             >
-              <div className="text-center mb-4 md:mb-5">
+              <div className="text-center mb-2.5 md:mb-5">
                 <div className="inline-flex items-center gap-3">
                   <div className="h-px w-6 md:w-8 bg-gold" />
                   <span className="text-gold font-sans text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase">
@@ -265,7 +265,7 @@ export function ValueStack() {
                 </div>
               </div>
 
-              <ul className="space-y-3 md:space-y-4 max-w-xl mx-auto">
+              <ul className="space-y-2 md:space-y-4 max-w-xl mx-auto">
                 <li
                   className="flex gap-3 text-base md:text-base text-charcoal/85 font-sans leading-snug"
                   data-testid="bonus-item-1"
@@ -280,7 +280,7 @@ export function ValueStack() {
                     <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
                       <span aria-hidden="true">🎁 </span>BONUS #1: The Tourist Trap Map (PDF)
                     </span>
-                    <span className="block mt-1 text-[10px] md:text-xs leading-relaxed tracking-wide">
+                    <span className="block mt-0.5 md:mt-1 text-[9px] md:text-xs leading-snug md:leading-relaxed tracking-wide">
                       The visual guide to avoid the 10 biggest mistakes
                       travelers make in Italy. Save money and time instantly.
                     </span>
@@ -300,7 +300,7 @@ export function ValueStack() {
                     <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
                       <span aria-hidden="true">🎧 </span>BONUS #2: Italian Social Scripts (Audio)
                     </span>
-                    <span className="block mt-1 text-[10px] md:text-xs leading-relaxed tracking-wide">
+                    <span className="block mt-0.5 md:mt-1 text-[9px] md:text-xs leading-snug md:leading-relaxed tracking-wide">
                       Master the rhythm of the language. Audio scripts for
                       restaurants and greetings to sound like a local.
                     </span>
@@ -406,7 +406,7 @@ export function ValueStack() {
                       href={buildCheckoutUrl()}
                       onClick={handleCheckoutClick}
                       className="w-full text-xs md:text-sm py-2.5 md:py-3 px-4 uppercase tracking-[0.15em]"
-                      style={{ color: "#C9A961" }}
+                      style={{ color: "#FFF5E6" }}
                       testId="button-checkout-summary"
                     >
                       Checkout — ${totalPrice.toFixed(2)}
@@ -427,7 +427,7 @@ export function ValueStack() {
                   href={buildCheckoutUrl()}
                   onClick={handleCheckoutClick}
                   className="w-full sm:w-auto text-base md:text-xl py-4 md:py-5 px-8 md:px-14 mb-3 uppercase tracking-[0.15em]"
-                  style={{ color: "#C9A961" }}
+                  style={{ color: "#FFF5E6" }}
                   testId="button-unlock-access"
                 >
                   Unlock My Insider Access Now
