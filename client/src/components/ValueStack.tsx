@@ -280,9 +280,9 @@ export function ValueStack() {
                     <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
                       <span aria-hidden="true">🎁 </span>BONUS #1: The Tourist Trap Map (PDF)
                     </span>
-                    <span className="block mt-1">
-                      Visual guide to avoid the 10 biggest mistakes Americans
-                      make in Italy.
+                    <span className="block mt-1 text-[10px] md:text-xs leading-relaxed tracking-wide">
+                      The visual guide to avoid the 10 biggest mistakes
+                      travelers make in Italy. Save money and time instantly.
                     </span>
                   </span>
                 </li>
@@ -298,12 +298,11 @@ export function ValueStack() {
                   </span>
                   <span>
                     <span className="font-serif font-black text-emerald-900 text-base md:text-lg block leading-tight">
-                      <span aria-hidden="true">🎧 </span>BONUS #2: Pronunciation &amp; Social Scripts Audio Guide (MP3)
+                      <span aria-hidden="true">🎧 </span>BONUS #2: Italian Social Scripts (Audio)
                     </span>
-                    <span className="block mt-1">
+                    <span className="block mt-1 text-[10px] md:text-xs leading-relaxed tracking-wide">
                       Master the rhythm of the language. Audio scripts for
-                      restaurants, coffee bars, and greetings to sound like a
-                      local.
+                      restaurants and greetings to sound like a local.
                     </span>
                   </span>
                 </li>
