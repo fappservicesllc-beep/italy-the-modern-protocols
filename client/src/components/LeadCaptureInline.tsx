@@ -194,8 +194,7 @@ export function LeadCaptureInline() {
         className="font-serif text-xl md:text-2xl text-emerald-900 font-bold text-center leading-tight"
         data-testid="text-lead-headline"
       >
-        Get my Free 2026 Italy Packing Masterlist{" "}
-        <span aria-hidden="true">🇮🇹</span>
+        Get my Free 2026 Italy Packing Masterlist
       </h3>
 
       <p className="font-sans font-light text-sm md:text-base text-charcoal/70 text-center mt-2 leading-snug">

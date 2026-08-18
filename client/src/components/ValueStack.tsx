@@ -10,6 +10,14 @@ const MAIN_VARIANT_ID = "47838889804002";
 const CULINARY_VAULT_VARIANT_ID = "47904170868962";
 const GOLDEN_PHRASES_VARIANT_ID = "47904166871266";
 const BUNDLE_BOTH_VARIANT_ID = "47904162939106";
+// The Italy Trip Review™ — $79 personalized itinerary review (order bump #4).
+// Verified live against the Shopify product JSON: price 7900, available true.
+const TRIP_REVIEW_VARIANT_ID = "48199746781410";
+// Appended as a second cart line whenever the Trip Review bump is selected.
+// Shopify's /cart/ permalink accepts comma-separated `variant:qty` pairs, so
+// this composes with EVERY existing bundle permalink without needing a new
+// pre-built URL per combination.
+const TRIP_REVIEW_CART_LINE = `,${TRIP_REVIEW_VARIANT_ID}:1`;
 
 // Pre-built Shopify checkout permalinks — one per selection combo.
 const CHECKOUT_URL_MAIN_ONLY =
@@ -43,6 +51,7 @@ export function ValueStack() {
   const [bumpCulinary, setBumpCulinary] = useState(false);
   const [bumpPhrases, setBumpPhrases] = useState(false);
   const [bumpAirport, setBumpAirport] = useState(false);
+  const [bumpTripReview, setBumpTripReview] = useState(false);
   const [upsellOpen, setUpsellOpen] = useState(false);
   // Once the user has been shown the popup and declined (or accepted), don't
   // re-trigger it again on subsequent clicks during the same session.
@@ -51,11 +60,28 @@ export function ValueStack() {
 
   const basePrice = 17;
   const bumpPrice = 8.99;
+  const tripReviewPrice = 79;
   const bumpCount =
     (bumpCulinary ? 1 : 0) + (bumpPhrases ? 1 : 0) + (bumpAirport ? 1 : 0);
-  const totalPrice = basePrice + bumpCount * bumpPrice;
+  const totalPrice =
+    basePrice +
+    bumpCount * bumpPrice +
+    (bumpTripReview ? tripReviewPrice : 0);
 
+  // Existing bundle-permalink logic is untouched. When the Trip Review bump is
+  // selected we append it as an extra cart line to whatever permalink the
+  // existing combos resolve to — the `?channel=buy_button` query on the
+  // main-only URL is preserved by inserting before the "?".
   const buildCheckoutUrl = () => {
+    const base = buildBundleUrl();
+    if (!bumpTripReview) return base;
+    const [path, query] = base.split("?");
+    return query
+      ? `${path}${TRIP_REVIEW_CART_LINE}?${query}`
+      : `${path}${TRIP_REVIEW_CART_LINE}`;
+  };
+
+  const buildBundleUrl = () => {
     if (bumpCulinary && bumpPhrases && bumpAirport)
       return CHECKOUT_URL_MAIN_PLUS_ALL_THREE;
     if (bumpCulinary && bumpAirport && !bumpPhrases)
@@ -196,6 +222,7 @@ export function ValueStack() {
         } else {
           contentIds.push(MAIN_VARIANT_ID);
         }
+        if (bumpTripReview) contentIds.push(TRIP_REVIEW_VARIANT_ID);
         window.fbq("track", "AddToCart", {
           content_name: "The Italy Insider Protocol Guide + Tourist Trap Map",
           content_ids: contentIds,
@@ -333,7 +360,7 @@ export function ValueStack() {
                 Everything you need to navigate Italy like a local — for less than one bad meal in Rome.
               </p>
 
-              {(bumpCulinary || bumpPhrases || bumpAirport) && (
+              {(bumpCulinary || bumpPhrases || bumpAirport || bumpTripReview) && (
                 <div
                   className="max-w-sm mx-auto mb-5 md:mb-6 text-xs md:text-sm font-sans bg-ivory border border-gold/30 rounded-sm px-4 py-3 space-y-1.5"
                   data-testid="order-summary"
@@ -358,6 +385,14 @@ export function ValueStack() {
                     <div className="flex justify-between text-charcoal/80" data-testid="summary-line-airport">
                       <span>+ Airport Survival Guide</span>
                       <span className="tabular-nums whitespace-nowrap">$8.99</span>
+                    </div>
+                  )}
+                  {bumpTripReview && (
+                    <div className="flex justify-between text-charcoal/80" data-testid="summary-line-trip-review">
+                      <span>+ Professional Trip Review&trade;</span>
+                      <span className="tabular-nums whitespace-nowrap">
+                        ${tripReviewPrice.toFixed(2)}
+                      </span>
                     </div>
                   )}
                   <div className="flex justify-between font-bold text-emerald-900 pt-1.5 mt-1.5 border-t border-gold/30">
@@ -582,6 +617,86 @@ export function ValueStack() {
                     </p>
                   </div>
                 </label>
+
+                {/* Order Bump #4: The Italy Trip Review™ — premium tier.
+                    Visually separated from the $8.99 add-ons with a solid
+                    emerald frame + crown badge so the price jump reads as a
+                    deliberate upgrade, not a mispriced add-on. */}
+                <div className="pt-3 mt-1">
+                  <div className="text-center mb-3">
+                    <div className="inline-flex items-center gap-3">
+                      <div className="h-px w-6 md:w-8 bg-gold/50" />
+                      <span className="text-charcoal/60 font-sans text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase">
+                        Or Go One Step Further
+                      </span>
+                      <div className="h-px w-6 md:w-8 bg-gold/50" />
+                    </div>
+                  </div>
+
+                  <label
+                    htmlFor="bump-trip-review"
+                    className={`block p-4 md:p-5 rounded-sm border-2 cursor-pointer transition-colors ${
+                      bumpTripReview
+                        ? "border-emerald-900 bg-emerald-900/[0.07]"
+                        : "border-emerald-900/70 bg-gradient-to-br from-ivory to-gold/[0.07] hover:border-emerald-900"
+                    }`}
+                    data-testid="order-bump-trip-review"
+                  >
+                    <div className="flex gap-3 md:gap-4">
+                      <input
+                        id="bump-trip-review"
+                        type="checkbox"
+                        checked={bumpTripReview}
+                        onChange={(e) => setBumpTripReview(e.target.checked)}
+                        className="mt-1 w-5 h-5 flex-shrink-0 accent-emerald-900 cursor-pointer"
+                        data-testid="checkbox-bump-trip-review"
+                      />
+                      <img
+                        src="/trip-review-bump.jpg"
+                        alt="The Italy Trip Review — personalized itinerary audit"
+                        className="block w-20 h-20 md:w-24 md:h-24 object-cover rounded-sm flex-shrink-0 border border-gold/40"
+                      />
+                      <div className="flex-1 text-left">
+                        <span
+                          className="inline-block mb-2 text-[9px] md:text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-ivory bg-emerald-900 rounded-sm px-2 py-1"
+                          data-testid="badge-executive-option"
+                        >
+                          👑 The Executive Option
+                        </span>
+                        <p className="font-serif font-bold text-emerald-900 text-lg md:text-xl leading-tight">
+                          Professional Trip Review&trade;
+                        </p>
+                        <p className="font-serif italic text-sm md:text-base text-gold mt-1 leading-snug">
+                          Professional audit of your flights, hotels, and route.
+                        </p>
+                      </div>
+                    </div>
+
+                    <p
+                      className="text-base md:text-sm text-charcoal/80 font-sans mt-3 leading-snug"
+                      data-testid="text-trip-review-bump-copy"
+                    >
+                      Want total peace of mind? I will personally audit your
+                      entire Italy itinerary to ensure it&rsquo;s flawless. No
+                      tourist traps, no logistics gaps.{" "}
+                      <span className="font-medium text-emerald-900">
+                        Valid for 90 days after purchase.
+                      </span>
+                    </p>
+
+                    <div className="mt-4 pt-3 border-t border-gold/30">
+                      <p className="text-base md:text-base font-sans font-bold text-emerald-900">
+                        Add my Personalized Trip Review for only{" "}
+                        <span className="text-lg md:text-xl">
+                          ${tripReviewPrice.toFixed(2)}
+                        </span>
+                      </p>
+                      <p className="text-[11px] md:text-xs text-charcoal/60 font-sans mt-1.5 italic">
+                        Limited to 5 travelers per week for quality assurance.
+                      </p>
+                    </div>
+                  </label>
+                </div>
               </div>
               <p className="text-xs md:text-sm text-charcoal/60 font-sans text-center mt-2.5 italic">
                 30-Day Money-Back Guarantee. If you don&rsquo;t feel more

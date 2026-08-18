@@ -27,7 +27,7 @@ const TRIP_REVIEW_CHECKOUT_URL =
 
 const ENQUIRY_EMAIL = "themodernprotocols@gmail.com";
 const CHECKOUT_FALLBACK = `mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent(
-  "Italy Trip Review — Founding Customer ($79)"
+  "Italy Trip Review — Founder Member ($79)"
 )}&body=${encodeURIComponent(
   "Hi — I'd like to book the Italy Trip Review.\n\nTravel dates:\nCities I've planned:\nLink or paste of my current itinerary:\n"
 )}`;
@@ -109,6 +109,29 @@ const offerIncludes = [
   "One follow-up email for clarification",
 ];
 
+/**
+ * The 90-day window matters more to buyers than any urgency device: it removes
+ * the "my itinerary isn't finished yet" objection right at the CTA.
+ */
+const processSteps = [
+  {
+    label: "Purchase Your Review",
+    copy: "Reserve your Italy Trip Review™.",
+  },
+  {
+    label: "Tell Us About Your Trip",
+    copy: "When you're ready, complete your private trip questionnaire and share the itinerary you've planned.",
+  },
+  {
+    label: "We Review It",
+    copy: "We'll review your pacing, route, timing, logistics, experience, missed opportunities, and potential red flags.",
+  },
+  {
+    label: "Receive Your Review",
+    copy: "Your personalized Italy Trip Review™ will be delivered within 3 business days after your completed questionnaire is received.",
+  },
+];
+
 const faqs = [
   {
     q: "Are you planning my entire trip?",
@@ -123,12 +146,20 @@ const faqs = [
     a: "Major itinerary design and extensive replanning are outside the scope of the standard Italy Trip Review™.",
   },
   {
+    q: "What if my itinerary isn't ready yet?",
+    a: "No problem. You don't need to submit your itinerary immediately after purchasing. Your Italy Trip Review™ remains available for 90 days from the date of purchase, so you can finish planning first and send it to us when you're ready.",
+  },
+  {
     q: "How quickly will I receive my review?",
     a: "Within 3 business days after receiving the completed itinerary and questionnaire.",
   },
   {
+    q: "When does the 3-business-day turnaround begin?",
+    a: "The turnaround period begins after we receive your completed Italy Trip Review questionnaire and the information necessary to perform your review.",
+  },
+  {
     q: "Can I ask questions afterward?",
-    a: "The Founding Customer offer includes one follow-up email for clarification.",
+    a: "The Founder Member offer includes one follow-up email for clarification.",
   },
   {
     q: "Why wouldn't I just use ChatGPT or Reddit?",
@@ -149,14 +180,31 @@ function ReviewCta({
   label,
   testId,
   className = "",
+  href,
 }: {
   label: string;
   testId: string;
   className?: string;
+  /** Defaults to the Shopify checkout. Pass "#offer" to send the visitor
+   *  down to the pricing card first, where the real checkout button lives. */
+  href?: string;
 }) {
+  const target = href ?? checkoutHref;
+  const isAnchor = target.startsWith("#");
+
   return (
     <a
-      href={checkoutHref}
+      href={target}
+      onClick={
+        isAnchor
+          ? (event) => {
+              const section = document.getElementById(target.slice(1));
+              if (!section) return; // let the browser handle it natively
+              event.preventDefault();
+              section.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          : undefined
+      }
       className={`inline-flex items-center justify-center bg-emerald-900 text-ivory hover:bg-emerald-950 px-8 py-5 md:py-4 rounded-sm font-serif text-xl md:text-lg tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 border border-emerald-900/20 ${className}`}
       data-testid={testId}
     >
@@ -241,6 +289,7 @@ export default function PlanYourTrip() {
                     label="Review My Italy Trip"
                     testId="button-hero-review-my-trip"
                     className="w-full sm:w-auto"
+                    href="#offer"
                   />
                 </FadeIn>
               </div>
@@ -511,10 +560,12 @@ export default function PlanYourTrip() {
           </div>
         </section>
 
-        {/* ── FOUNDING CUSTOMER OFFER ─────────────────────────── */}
+        {/* ── FOUNDING CUSTOMER OFFER ───────────────────────────
+            scroll-mt keeps the sticky announcement bar from covering the top of
+            this card when the hero CTA jumps down here. */}
         <section
           id="offer"
-          className="py-20 md:py-28 bg-ivory-100 border-y border-gold/15"
+          className="scroll-mt-24 md:scroll-mt-28 py-20 md:py-28 bg-ivory-100 border-y border-gold/15"
           data-testid="section-founding-offer"
         >
           <div className="max-w-2xl mx-auto px-6">
@@ -524,8 +575,11 @@ export default function PlanYourTrip() {
 
                 <div className="p-8 md:p-12">
                   <div className="text-center">
-                    <span className="inline-block font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-gold-600 border border-gold/40 bg-gold/10 rounded-full px-4 py-1.5">
-                      Founding Customer Offer
+                    <span
+                      className="inline-block font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-gold-600 border border-gold/40 bg-gold/10 rounded-full px-4 py-1.5"
+                      data-testid="badge-founder-member-offer"
+                    >
+                      Founder Member Offer
                     </span>
 
                     <h2 className="mt-7 font-serif text-4xl md:text-5xl text-emerald-900 leading-tight">
@@ -534,21 +588,34 @@ export default function PlanYourTrip() {
 
                     <div className="mt-7 flex flex-col items-center">
                       <span className="font-sans text-[10px] uppercase tracking-[0.22em] text-charcoal/45">
-                        Founding Customer Price
+                        Founder Member Price
                       </span>
-                      <span
-                        className="font-serif text-6xl md:text-7xl text-emerald-900 leading-none mt-2"
-                        data-testid="text-trip-review-price"
-                      >
-                        $79
-                      </span>
+                      <div className="mt-2 flex items-end justify-center gap-4">
+                        <span
+                          className="font-serif text-3xl md:text-4xl text-charcoal/35 line-through decoration-[1.5px] decoration-[#C0562F]/60 leading-none pb-2"
+                          data-testid="text-trip-review-original-price"
+                        >
+                          $149.00
+                        </span>
+                        <span
+                          className="font-serif text-6xl md:text-7xl text-emerald-900 leading-none"
+                          data-testid="text-trip-review-price"
+                        >
+                          $79.00
+                        </span>
+                      </div>
                     </div>
 
                     <p
-                      className="mt-5 font-sans text-[13px] font-medium tracking-wide text-[#C0562F]"
-                      data-testid="text-limited-to-five"
+                      className="mt-6 mx-auto max-w-md font-sans text-[13px] md:text-sm font-light leading-relaxed text-charcoal/70"
+                      data-testid="text-limited-availability"
                     >
-                      Limited to the first 5 reviews.
+                      <span className="font-medium text-[#C0562F]">
+                        Limited availability:
+                      </span>{" "}
+                      I only accept 5 itinerary audits per week to ensure every
+                      traveler gets my full attention and a surgical review of
+                      their route.
                     </p>
                   </div>
 
@@ -578,6 +645,16 @@ export default function PlanYourTrip() {
                       testId="button-offer-review-my-trip"
                       className="w-full"
                     />
+                    <div
+                      className="mt-5 rounded-sm border border-gold/25 bg-gold/[0.06] px-5 py-4"
+                      data-testid="note-ninety-day-window"
+                    >
+                      <p className="text-center font-sans text-[13px] text-emerald-900/80 font-medium leading-relaxed">
+                        Your itinerary doesn&rsquo;t need to be ready today.
+                        Purchase now and submit your trip for review anytime
+                        within 90 days.
+                      </p>
+                    </div>
                     <p className="mt-4 text-center font-sans text-xs text-charcoal/45 font-light leading-relaxed">
                       After checkout you&rsquo;ll receive a short questionnaire
                       and a link to send your itinerary.
@@ -586,6 +663,96 @@ export default function PlanYourTrip() {
                 </div>
               </div>
             </FadeIn>
+          </div>
+        </section>
+
+        {/* ── 90-DAY WINDOW + HOW IT WORKS ────────────────────── */}
+        <section
+          className="py-20 md:py-24 bg-paper"
+          data-testid="section-ninety-day-window"
+        >
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="max-w-2xl">
+              <FadeIn delay={0.1}>
+                <span className="text-gold font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
+                  No Rush
+                </span>
+                <GoldRule className="mt-4 mb-6" />
+              </FadeIn>
+
+              <FadeIn delay={0.2}>
+                <h2
+                  className="text-4xl md:text-5xl font-serif text-emerald-900 leading-tight mb-8"
+                  data-testid="text-no-rush-headline"
+                >
+                  Your Trip Doesn&rsquo;t Have to Be Ready Today
+                </h2>
+              </FadeIn>
+
+              <FadeIn delay={0.3}>
+                <div className="space-y-5 text-lg md:text-base text-charcoal/75 font-sans font-light leading-relaxed">
+                  <p>
+                    After purchasing The Italy Trip Review&trade;, you&rsquo;ll
+                    receive a short questionnaire where you can share your
+                    itinerary and trip details.
+                  </p>
+                  <p>
+                    <span className="font-medium text-emerald-900">
+                      There&rsquo;s no need to complete it immediately.
+                    </span>{" "}
+                    Your Trip Review can be submitted anytime within{" "}
+                    <span className="font-medium text-emerald-900">
+                      90 days of purchase
+                    </span>
+                    , giving you time to finish planning before asking us to
+                    take a second look.
+                  </p>
+                  <p>
+                    Once we receive your completed questionnaire, your
+                    personalized review begins.
+                  </p>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.4}>
+                <div className="mt-9 border-l-2 border-gold pl-6">
+                  <p
+                    className="font-serif italic text-2xl md:text-[26px] text-emerald-900 leading-snug"
+                    data-testid="text-turnaround-start"
+                  >
+                    Your 3-business-day delivery window starts when we receive
+                    your completed trip questionnaire&mdash;not on the date of
+                    purchase.
+                  </p>
+                </div>
+              </FadeIn>
+            </div>
+
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+              {processSteps.map((step, i) => (
+                <FadeIn key={step.label} delay={0.08 * i}>
+                  <div
+                    className="flex gap-5 py-6 border-b border-gold/15"
+                    data-testid={`step-${i + 1}`}
+                  >
+                    <span
+                      className="shrink-0 font-serif text-3xl md:text-[32px] text-gold/70 leading-none w-9"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <div>
+                      <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-900 mb-2">
+                        {step.label}
+                      </h3>
+                      <p className="text-base md:text-[15px] text-charcoal/70 font-sans font-light leading-relaxed">
+                        {step.copy}
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
           </div>
         </section>
 
