@@ -39,8 +39,10 @@ export function Hero() {
                 className="text-2xl md:text-xl text-charcoal/80 leading-relaxed font-sans font-light mb-6 md:mb-8"
                 data-testid="text-hero-subheadline"
               >
-                The exact system 847 travelers used to eat, move and speak like
-                locals — without spending years learning Italian.
+                Understand the customs, rhythms and unwritten rules most
+                travelers only discover after they arrive &mdash; so you can
+                move through Italy with more confidence and fewer costly
+                mistakes.
               </p>
             </FadeIn>
 

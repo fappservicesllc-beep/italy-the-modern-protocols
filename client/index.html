@@ -90,6 +90,14 @@
       <input type="text" name="bot-field" />
     </form>
 
+    <!-- Same ghost-form trick for the Italy Pronunciation Lab priority list on
+         /planyourtripwithus. Netlify only scans raw HTML (it never runs React),
+         so this must exist for that form-name to be registered at build time. -->
+    <form name="priority-list" netlify netlify-honeypot="bot-field" hidden>
+      <input type="email" name="email" />
+      <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 

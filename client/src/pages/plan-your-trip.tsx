@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Footer } from "@/components/Footer";
+import { PriorityListForm } from "@/components/PriorityListForm";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   PlusIcon,
@@ -30,12 +31,6 @@ const CHECKOUT_FALLBACK = `mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent(
   "Italy Trip Review — Founder Member ($79)"
 )}&body=${encodeURIComponent(
   "Hi — I'd like to book the Italy Trip Review.\n\nTravel dates:\nCities I've planned:\nLink or paste of my current itinerary:\n"
-)}`;
-
-const WAITLIST_MAILTO = `mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent(
-  "Priority List — The Italy Pronunciation Lab"
-)}&body=${encodeURIComponent(
-  "Hi — please add me to the priority list for The Italy Pronunciation Lab.\n"
 )}`;
 
 const checkoutHref = TRIP_REVIEW_CHECKOUT_URL || CHECKOUT_FALLBACK;
@@ -851,13 +846,7 @@ export default function PlanYourTrip() {
                 </div>
 
                 <div className="shrink-0">
-                  <a
-                    href={WAITLIST_MAILTO}
-                    className="inline-flex items-center justify-center w-full md:w-auto border border-emerald-900/30 text-emerald-900 hover:bg-emerald-900 hover:text-ivory px-7 py-4 rounded-sm font-sans text-xs font-bold uppercase tracking-[0.18em] transition-all duration-300"
-                    data-testid="button-join-priority-list"
-                  >
-                    Join the Priority List
-                  </a>
+                  <PriorityListForm />
                 </div>
               </div>
             </div>

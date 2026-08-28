@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { SocialProofBar } from "@/components/SocialProofBar";
 import { OpeningHook } from "@/components/OpeningHook";
 import { Problem } from "@/components/Problem";
+import { InsideVersionTwo } from "@/components/InsideVersionTwo";
 import { WhyFailed } from "@/components/WhyFailed";
 import { Mechanism } from "@/components/Mechanism";
 import { WhatYouGet } from "@/components/WhatYouGet";
@@ -24,6 +25,7 @@ export default function Home() {
         <SocialProofBar />
         <OpeningHook />
         <Problem />
+        <InsideVersionTwo />
         <WhyFailed />
         <Mechanism />
         <WhatYouGet />

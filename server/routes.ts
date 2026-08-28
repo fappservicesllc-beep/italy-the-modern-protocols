@@ -30,7 +30,10 @@ export function registerRoutes(app: Express): void {
     const ghlFields = {
       email,
       first_name: String(body.first_name ?? email.split("@")[0] ?? ""),
-      tags: "italy-packing-masterlist",
+      // Honour a tag sent by the caller so each form can be segmented into its
+      // own GHL workflow; fall back to the Packing Masterlist tag for the
+      // original form, which does not send one.
+      tags: String(body.tags ?? "") || "italy-packing-masterlist",
       source:
         String(body.source ?? "") ||
         "Italy Insider Protocol - Packing Masterlist form",
@@ -66,7 +69,7 @@ export function registerRoutes(app: Express): void {
         },
         body: JSON.stringify({
           email,
-          _subject: "New lead — 2026 Italy Packing Masterlist (server relay)",
+          _subject: `New lead — ${ghlFields.source} (server relay)`,
           source: ghlFields.source,
           page: ghlFields.page,
           _template: "table",

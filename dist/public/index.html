@@ -76,8 +76,8 @@
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-C8uM_hpu.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-j6q4bZoV.css">
+    <script type="module" crossorigin src="/assets/index-DbDpKHW3.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D3aFhrxd.css">
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2230969181053161&ev=PageView&noscript=1" alt="" /></noscript>
@@ -88,6 +88,14 @@
          Netlify only scans the raw HTML (it does not run React), so this ghost
          form MUST list every field the React form submits. -->
     <form name="packing-masterlist" netlify netlify-honeypot="bot-field" hidden>
+      <input type="email" name="email" />
+      <input type="text" name="bot-field" />
+    </form>
+
+    <!-- Same ghost-form trick for the Italy Pronunciation Lab priority list on
+         /planyourtripwithus. Netlify only scans raw HTML (it never runs React),
+         so this must exist for that form-name to be registered at build time. -->
+    <form name="priority-list" netlify netlify-honeypot="bot-field" hidden>
       <input type="email" name="email" />
       <input type="text" name="bot-field" />
     </form>

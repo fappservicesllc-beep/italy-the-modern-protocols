@@ -82,7 +82,10 @@ export const handler = async (event) => {
   const ghlFields = {
     email,
     first_name: String(payload.first_name || email.split("@")[0] || ""),
-    tags: "italy-packing-masterlist",
+    // Honour a tag sent by the caller so each form can be segmented into its
+    // own GHL workflow; fall back to the Packing Masterlist tag for the
+    // original form, which does not send one.
+    tags: String(payload.tags || "") || "italy-packing-masterlist",
     source:
       String(payload.source || "") ||
       "Italy Insider Protocol - Packing Masterlist form",
@@ -117,7 +120,7 @@ export const handler = async (event) => {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         email,
-        _subject: "New lead — 2026 Italy Packing Masterlist (server relay)",
+        _subject: `New lead — ${ghlFields.source} (server relay)`,
         source: ghlFields.source,
         page: ghlFields.page,
         _template: "table",
