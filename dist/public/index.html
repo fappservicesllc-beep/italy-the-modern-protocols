@@ -16,8 +16,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Preload above-the-fold hero image to improve LCP on mobile -->
-    <link rel="preload" as="image" href="/protocol-hero.jpg" fetchpriority="high" />
+    <!-- Preload above-the-fold hero images to improve LCP on mobile.
+         The hero is a device mockup: darkened backdrop + the iPad screen are
+         the two elements that decide LCP, so both are preloaded. -->
+    <link rel="preload" as="image" href="/hero-bundle-backdrop.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/hero-device-map.jpg" fetchpriority="high" />
 
     <!-- Google Fonts loaded non-render-blocking via the print-onload swap.
          font-display: swap is already set in the Google Fonts URL (&display=swap)
@@ -76,8 +79,8 @@
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-DbDpKHW3.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D3aFhrxd.css">
+    <script type="module" crossorigin src="/assets/index-CMP-kKaf.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-EkkXF97W.css">
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2230969181053161&ev=PageView&noscript=1" alt="" /></noscript>
